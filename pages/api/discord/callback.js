@@ -36,6 +36,9 @@ export default async function DiscordCallback(req, res) {
         method: 'POST',
         body
     }).then(res => res.json());
+    if(discordtoken.error) {
+        return res.send(JSON.stringify(discordtoken, null, 2));
+    }
 
     if(!discordtoken.access_token || typeof discordtoken.access_token !== 'string') {
         return res.redirect(URI);
@@ -59,9 +62,9 @@ export default async function DiscordCallback(req, res) {
         serialize('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'strict',
+            sameSite: 'lax',
             path: '/'
         })
     );
-    res.redirect('/')
+    res.redirect('/');
 }
