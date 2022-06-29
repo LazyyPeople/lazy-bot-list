@@ -5,11 +5,11 @@ import {
     Avatar
 } from '@chakra-ui/react';
 import MenuItem from './MenuItem';
-import { navbar } from '../../../../utils/config.json';
+import config from '../../../../utils/config.json';
 
 export default function Menu({user}) {
     return (
-        <MenuChakra>
+        <MenuChakra >
             <MenuButton
                 as={Button}
                 rounded={'full'}
@@ -24,7 +24,7 @@ export default function Menu({user}) {
                     }
                 />
             </MenuButton>
-            <MenuItem data={navbar.profile_nav} />
+            <MenuItem data={config.navbar.profile_nav} />
         </MenuChakra>
     )
 }

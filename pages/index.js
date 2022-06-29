@@ -6,7 +6,7 @@ export default function Home({user}) {
   return (
     <>
       <Head title={'{name} - Home'} />
-      <Navbar user={user} />    
+      <Navbar user={user} />
     </>
   )
 }

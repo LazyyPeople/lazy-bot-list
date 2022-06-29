@@ -22,8 +22,6 @@ export default function Document() {
 
                 <meta property='og:image' content='' />
                 <meta property='og:image:alt' content='Avatar from Discord Bot List' />
-
-                <title>{config['web-data'].name}</title>
             </Head>
             <body>
                 <Main />

@@ -10,7 +10,7 @@ import {
 import MobileNavItem from './MobileNavItem';
 import config from '../../../utils/config.json';
 
-export default function MobileNav({router}) {
+export default function MobileNav({router, user}) {
     return (
       <Stack
         bg={useColorModeValue('gray.800')}
@@ -19,23 +19,27 @@ export default function MobileNav({router}) {
         {config.navbar.navbar_data.map((navItem) => (
           <MobileNavItem key={navItem.label} router={router} {...navItem} />
         ))}
-        <Button
-          flex={{ base: 1 }}
-          width={'100%'}
-          gap={'5'}
-          color={'white'}
-          bg={'#5865F2'}
-          onClick={(e) => {
-            e.preventDefault();
-            router.push('/api/discord-login');
-        }}
-          marginTop={'5'}
-          _hover={{
-            bg: config['login-data'].href.bg
+
+
+        {!user && (
+          <Button
+            flex={{ base: 1 }}
+            width={'100%'}
+            gap={'5'}
+            color={'white'}
+            bg={'#5865F2'}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push('/api/discord-login');
           }}
-        >
-          <SiDiscord /> Login With Discord
-        </Button>
+            marginTop={'5'}
+            _hover={{
+              bg: config['login-data'].href.bg
+            }}
+          >
+            <SiDiscord /> Login With Discord
+          </Button>
+        )}
       </Stack>
     );
   };

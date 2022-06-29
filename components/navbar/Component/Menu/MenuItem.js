@@ -2,12 +2,14 @@ import { Link, MenuList, MenuItem as MenuitemChakra, MenuDivider } from "@chakra
 
 export default function MenuItem({ data }) {
     return (
-        <MenuList>
+        <MenuList
+            boxShadow={'md'}
+        >
             {data.map(x => {
                 if (x.name === 'divider') return <MenuDivider />;
 
                 return (
-                    <Link key={x.name}>
+                    <Link href={x.href} key={x.name}>
                         <MenuitemChakra
                             color={x.style == 'red' ? 'red.400' : 'gray.700'}
                             display={'flex'}

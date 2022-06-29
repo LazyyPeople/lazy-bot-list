@@ -31,7 +31,7 @@ export default function Navbar({ user }) {
     return (
         <Box>
             <Flex
-                bg={useColorModeValue('gray.800', 'gray.800')}
+                bg={useColorModeValue('gray.700', 'gray.800')}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: 2 }}
@@ -106,7 +106,7 @@ export default function Navbar({ user }) {
             </Flex>
 
             <Collapse in={isOpen} animateOpacity>
-                <MobileNav router={router} />
+                <MobileNav user={user} router={router} />
             </Collapse>
         </Box>
     );
