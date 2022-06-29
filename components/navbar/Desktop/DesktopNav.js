@@ -7,16 +7,7 @@ import {
     PopoverTrigger,
     PopoverContent
 } from '@chakra-ui/react';
-const NAV_ITEMS = [
-  {
-    label: 'Home',
-    href: '/'
-  },
-  {
-    label: 'Partners',
-    href: '/partners'
-  }
-];
+import config from '../../../utils/config.json';
 
 export default function DesktopNav({router}) {
     const linkColor = useColorModeValue('gray.500');
@@ -26,7 +17,7 @@ export default function DesktopNav({router}) {
   
     return (
       <Stack direction={'row'} spacing={4}>
-        {NAV_ITEMS.map((navItem) => (
+        {config.navbar.navbar_data.map((navItem) => (
           <Box key={navItem.label}>
             <Popover trigger={'hover'} placement={'bottom-start'}>
               <PopoverTrigger>

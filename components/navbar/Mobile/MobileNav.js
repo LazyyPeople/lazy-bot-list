@@ -6,27 +6,9 @@ import {
 import {
     SiDiscord
 } from 'react-icons/si';
-const NAV_ITEMS = [
-  {
-    label: 'Home',
-    href: '/'
-  },
-  {
-    label: 'Partners',
-    href: '/partners'
-  }
-];
-
 
 import MobileNavItem from './MobileNavItem';
-const LOGIN = {
-  href: '/api/discord-login',
-  bg: '#5865F2',
-  href: {
-    bg: '#7289da'
-  },
-  color: 'white'
-}
+import config from '../../../utils/config.json';
 
 export default function MobileNav({router}) {
     return (
@@ -34,7 +16,7 @@ export default function MobileNav({router}) {
         bg={useColorModeValue('gray.800')}
         p={4}
         display={{ md: 'none' }}>
-        {NAV_ITEMS.map((navItem) => (
+        {config.navbar.navbar_data.map((navItem) => (
           <MobileNavItem key={navItem.label} router={router} {...navItem} />
         ))}
         <Button
@@ -43,10 +25,13 @@ export default function MobileNav({router}) {
           gap={'5'}
           color={'white'}
           bg={'#5865F2'}
+          onClick={(e) => {
+            e.preventDefault();
+            router.push('/api/discord-login');
+        }}
           marginTop={'5'}
-          href={LOGIN.href}
           _hover={{
-            bg: '#7289da'
+            bg: config['login-data'].href.bg
           }}
         >
           <SiDiscord /> Login With Discord

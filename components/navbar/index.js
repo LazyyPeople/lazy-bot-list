@@ -4,17 +4,11 @@ import {
     IconButton,
     Button,
     Heading,
-    //Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuDivider,
     Stack,
     Collapse,
     useColorModeValue,
     useBreakpointValue,
-    useDisclosure,
-    Avatar
+    useDisclosure
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { SiDiscord } from "react-icons/si";
@@ -27,7 +21,8 @@ import {
 import DesktopNav from './Desktop/DesktopNav';
 import MobileNav from './Mobile/MobileNav';
 
-import Menu from './Menu/Menu';
+import config from '../../utils/config.json';
+import Menu from './Component/Menu/Menu';
 
 export default function Navbar({ user }) {
     const { isOpen, onToggle } = useDisclosure();
@@ -72,7 +67,7 @@ export default function Navbar({ user }) {
                         fontWeight={'800'}
                         size={'md'}
                         color={useColorModeValue('blue.300', 'white')}>
-                        Discord Bot List
+                        {config['web-data'].name}
                     </Heading>
 
                     <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -88,7 +83,8 @@ export default function Navbar({ user }) {
 
                     {user ? (
                         <Menu user={user} />
-                    ) : (<Button
+                    ) : (
+                    <Button
                         display={{ base: 'none', md: 'inline-flex' }}
                         fontSize={'sm'}
                         fontWeight={600}
@@ -101,7 +97,7 @@ export default function Navbar({ user }) {
                         flex={{ base: 1 }}
                         gap={'2'}
                         _hover={{
-                            bg: '#7289da',
+                            bg: config['login-data'].href.bg,
                         }}>
                         <SiDiscord /> Login With Discord
                     </Button>

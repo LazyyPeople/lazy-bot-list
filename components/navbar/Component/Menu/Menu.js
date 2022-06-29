@@ -5,6 +5,7 @@ import {
     Avatar
 } from '@chakra-ui/react';
 import MenuItem from './MenuItem';
+import { navbar } from '../../../../utils/config.json';
 
 export default function Menu({user}) {
     return (
@@ -23,30 +24,7 @@ export default function Menu({user}) {
                     }
                 />
             </MenuButton>
-            <MenuItem data={data} />
-            {/* <MenuList>
-                <MenuItem display={'flex'} gap={'3'}><BiUserCircle /> Profile</MenuItem>
-                <MenuItem display={'flex'} gap={'3'}><AddIcon w={3} h={3} /> Add Bot</MenuItem>
-                <MenuDivider />
-                <MenuItem color={'red.400'} display={'flex'} gap={'3'}><TbLogout /> Logout</MenuItem>
-            </MenuList> */}
+            <MenuItem data={navbar.profile_nav} />
         </MenuChakra>
     )
 }
-
-const data = [
-    {
-        name: 'Profile'
-    },
-    {
-        name: 'Add Bot'
-    },
-    {
-        name: 'divider'
-    },
-    {
-        name: 'Logout',
-        href: '/api/discord/logout',
-        style: 'red'
-    }
-]

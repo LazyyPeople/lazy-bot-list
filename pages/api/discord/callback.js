@@ -1,9 +1,10 @@
-const redirect_uri = 'http://localhost:3000/api/discord/callback';
-const URI ='';
-const scope = ['identify'].join(' ');
+// const redirect_uri = 'http://localhost:3000/api/discord/callback';
+// const URI ='';
+// const scope = ['identify'].join(' ');
 import fetch from "node-fetch";
 import { serialize } from 'cookie';
 import { sign } from 'jsonwebtoken';
+import config from '../../../utils/config.json';
 
 export default async function DiscordCallback(req, res) {
     const {
@@ -13,22 +14,22 @@ export default async function DiscordCallback(req, res) {
 
     if(error) {
         console.log('error')
-        return res.redirect(`/error?message=${req.query.error}`);
+        return res.send(req.query.error);
     }
-    console.log(code)
+    // console.log(code)
     if(!code || typeof code !== 'string') return res.redirect(URI);
     // console.log('g')
 
     const body = new URLSearchParams({
-        client_id: '702874025189179533',
-        client_secret: 'byXbKnnKXuT68pR3bnZDFjRSdf6lMSDk',
+        client_id: config["oauth-discord"].client_id,
+        client_secret: config["oauth-discord"].client_secret,
         grant_type: 'authorization_code',
-        redirect_uri: redirect_uri,
+        redirect_uri: config["oauth-discord"].redirect_uri,
         code,
-        scope
+        scope: config["oauth-discord"].scopes.join(' ')
     }).toString();
 
-    const discordtoken = await fetch('https://discord.com/api/oauth2/token', {
+    const discordtoken = await fetch(`${config.discord.api.base}/oauth2/token`, {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             'Accept': 'application/json'
@@ -44,7 +45,7 @@ export default async function DiscordCallback(req, res) {
         return res.redirect(URI);
     }
 
-    const me = await fetch("http://discord.com/api/users/@me", {
+    const me = await fetch(`${config.discord.api.base}/users/@me`, {
         headers: {
             Authorization: `${discordtoken.token_type} ${discordtoken.access_token}`
         }
@@ -54,12 +55,12 @@ export default async function DiscordCallback(req, res) {
         return res.redirect(URI);
     }
 
-    const token = sign(me, 'botlistdiscordbotbylazypeople', {
+    const token = sign(me, config.jsonwebtoken["secret-key"], {
         expiresIn: '24h'
     });
     res.setHeader(
         "Set-Cookie",
-        serialize('token', token, {
+        serialize(config.jsonwebtoken["cookie-name"], token, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
             sameSite: 'lax',

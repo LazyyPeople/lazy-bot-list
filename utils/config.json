@@ -1,0 +1,55 @@
+{
+    "web-data": {
+        "name": "Discord Bot List"
+    },
+    "navbar": {
+        "navbar_data": [
+            {
+                "label": "Home",
+                "href": "/"
+            },
+            {
+                "label": "Partners",
+                "href": "/partners"
+            }
+        ],
+        "profile_nav": [
+            {
+                "name": "Profile"
+            },
+            {
+                "name": "Add Bot"
+            },
+            {
+                "name": "divider"
+            },
+            {
+                "name": "Logout",
+                "href": "/api/discord/logout",
+                "style": "red"
+            }
+        ]
+    },
+    "login-data": {
+        "bg": "#5865F2",
+        "href": {
+          "bg": "#7289da"
+        },
+        "color": "white"
+    },
+    "oauth-discord": {
+        "client_secret": "byXbKnnKXuT68pR3bnZDFjRSdf6lMSDk",
+        "client_id": "702874025189179533",
+        "redirect_uri": "http://localhost:3000/api/discord/callback",
+        "scopes": ["identify"]
+    },
+    "discord": {
+        "api": {
+            "base": "https://discord.com/api"
+        }
+    },
+    "jsonwebtoken": {
+        "secret-key": "botlistdiscordbotbylazypeople",
+        "cookie-name": "token"
+    }
+}
