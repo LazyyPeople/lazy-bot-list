@@ -1,16 +1,95 @@
-import parseUser from  '../utils/parseUser';
+import parseUser from '../utils/parseUser';
 import Head from '../components/head';
 import Navbar from '../components/navbar';
+import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link } from '@chakra-ui/react';
 
-export default function Home({user}) {
+export default function Home({ user }) {
   return (
     <>
       <Head title={'{name} - Home'} />
       <Navbar user={user} />
+
+      <Box
+        bg={'gray.700'}
+        boxShadow={'sm'}
+      >
+        <Container maxW={'6xl'}>
+          <Box py={{ base: '30px', md: '45px' }}>
+            <Flex>
+              <Box>
+                <Box>
+                  <Text color={'gray.50'} fontWeight={'700'} fontSize={'4xl'}>Discord Bots</Text>
+                  <Text color={'gray.50'} fontSize={'xl'}>Explore some great <b>Discord Bots</b> for your server</Text>
+                </Box>
+                <Box mt={'5'}>
+                  <Input
+                    placeholder='Search Bot Dank Memer, Mee6, Koya, etc.'
+                    borderColor={'gray.500'}
+                    focusBorderColor={'blue.200'}
+                    color={'white'}
+                    _hover={{
+                      borderColor: 'gray.500'
+                    }}
+                  />
+                </Box>
+                <Box mt={'5'} color={'white'} display={'flex'} gap={'2'} flexWrap={'wrap'}>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
+                </Box>
+              </Box>
+              <Box>
+
+              </Box>
+            </Flex>
+          </Box>
+        </Container>
+      </Box>
+
+
+      <Box mt={'10'}>
+        <Container maxW={'6xl'}>
+          <Text fontWeight={'800'} fontSize={'4xl'} color={'gray.800'}>Top Votes</Text>
+          <Text fontSize={'xl'} color={'gray.500'} fontWeight={'600'} mt={'-3'}>Bot with the most votes on this web</Text>
+        </Container>
+      </Box>
+
+      {/* Footer */}
+      <Box
+        bg={'gray.900'}
+        color={'gray.200'}
+      >
+        <Container as={Stack} maxW={'6xl'} py={10}>
+          <SimpleGrid columns={{base: 1, sm: 2, md: 4}} spacing={8}>
+            <Stack align={'flex-start'}>
+              <Text fontWeight={'500'} fontSize={'lg'} mb={2}>Links</Text>
+              <Link href={'#'}>Privacy Policy</Link>
+              <Link href={'#'}>Add Bot</Link>
+              <Link href={'#'}>Top Votes</Link>
+            </Stack>
+          </SimpleGrid>
+        </Container>
+        <Box
+          borderTopWidth={1}
+          borderStyle={'solid'}
+          borderColor={'gray.700'}
+        >
+          <Container
+            as={Stack}
+            maxW={'6xl'}
+            spacing={4}
+            py={4}
+            centerContent
+          >
+            <Text color={'gray.600'}>DiscordBotList is not affiliated with Discord Inc.</Text>
+          </Container>
+        </Box>
+      </Box>
     </>
   )
 }
-export async function getServerSideProps (ctx) {
+export async function getServerSideProps(ctx) {
   const user = parseUser(ctx);
   return {
     props: {

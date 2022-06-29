@@ -13,7 +13,7 @@ import config from '../../../utils/config.json';
 export default function MobileNav({router, user}) {
     return (
       <Stack
-        bg={useColorModeValue('gray.800')}
+        bg={useColorModeValue('gray.700')}
         p={4}
         display={{ md: 'none' }}>
         {config.navbar.navbar_data.map((navItem) => (

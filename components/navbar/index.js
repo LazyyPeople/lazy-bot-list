@@ -67,7 +67,7 @@ export default function Navbar({ user }) {
                         fontWeight={'800'}
                         size={'md'}
                         color={useColorModeValue('blue.300', 'white')}>
-                        {config['web-data'].name}
+                        LazyPeople
                     </Heading>
 
                     <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
