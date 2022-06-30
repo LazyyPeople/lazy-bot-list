@@ -65,9 +65,9 @@ export default function Navbar({ user }) {
                         textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
                         fontFamily={'heading'}
                         fontWeight={'800'}
-                        size={'md'}
+                        fontSize={'xl'}
                         color={useColorModeValue('blue.300', 'white')}>
-                        LazyPeople
+                        Lazy
                     </Heading>
 
                     <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
