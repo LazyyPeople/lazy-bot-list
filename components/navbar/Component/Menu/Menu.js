@@ -20,7 +20,7 @@ export default function Menu({user}) {
                     width={'45px'}
                     height={'45px'}
                     src={
-                        `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+                        `${config.discord.api.cdn}/avatars/${user.id}/${user.avatar}.png`
                     }
                 />
             </MenuButton>
