@@ -6,6 +6,9 @@ import{
     Flex,
     useColorModeValue
 } from '@chakra-ui/react';
+import {
+  Icon
+} from '@chakra-ui/icons';
 
 export default function DesktopSubNav({ label, href, subLabel }) {
     return (

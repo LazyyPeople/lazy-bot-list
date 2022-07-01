@@ -17,8 +17,8 @@ export default function Footer() {
         >
             <Container as={Stack} maxW={'6xl'} py={10}>
                 <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={8}>
-                    {config.navbar.footer_nav.links.map(x => (
-                        <FooterItem data={x} />
+                    {config.navbar.footer_nav.links.map((x, i) => (
+                        <FooterItem data={x} key={i} />
                     ))}
                 </SimpleGrid>
             </Container>

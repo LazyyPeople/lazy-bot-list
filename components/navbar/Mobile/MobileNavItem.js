@@ -50,12 +50,10 @@ export default function MobileNavItem({ label, children, href, router }) {
             borderColor={useColorModeValue('gray.200', 'gray.700')}
             align={'start'}>
             {children &&
-              children.map((child) => (
-                // <NextLink href={child.href} passHref key={child.label}>
-                  <Link href={child.href} py={2}>
-                    {child.label}
-                  </Link>
-                // </NextLink>
+              children.map((child, i) => (
+                <Link href={child.href} key={i} py={2}>
+                  {child.label}
+                </Link>
               ))}
           </Stack>
         </Collapse>

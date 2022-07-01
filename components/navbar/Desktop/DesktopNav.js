@@ -8,6 +8,7 @@ import {
     PopoverContent
 } from '@chakra-ui/react';
 import config from '../../../utils/config.json';
+import DesktopSubNav from './DesktopSubNav';
 
 export default function DesktopNav({router}) {
     const linkColor = useColorModeValue('gray.500');
