@@ -11,14 +11,17 @@ export default function Home({ user }) {
   const [loading, setLoad] = useState(false);
   const [allBot, setAllBot] = useState(null);
   useEffect(() => {
-    setLoad(true);
-    let url = `${config['web-data'].api.base}/bot/all`;
-    fetch(url, {
-      method: 'GET'
-    }).then(x => x.json())
-    .then(data => {
-      setAllBot(data);
-    })
+    function getData() {
+      setLoad(true);
+      let url = `${config['web-data'].api.base}/bot/all`;
+      fetch(url, {
+        method: 'GET'
+      }).then(x => x.json())
+      .then(data => {
+        setAllBot(data);
+      })
+  }
+  getData();
 
   }, [allBot]);
 
@@ -85,8 +88,8 @@ export default function Home({ user }) {
                     </Box>
                   </Flex>
                   <Flex mt={'10'} gap={'2'}>
-                    <Skeleton width={'50%'} height={'40px'} />
-                    <Skeleton width={'50%'} height={'40px'} />
+                    <Skeleton width={'50%'} height={'34px'} />
+                    <Skeleton width={'50%'} height={'34px'} />
                   </Flex>
                 </Box>
               ))}
