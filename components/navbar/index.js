@@ -21,7 +21,7 @@ import {
 import DesktopNav from './Desktop/DesktopNav';
 import MobileNav from './Mobile/MobileNav';
 
-import config from '../../utils/config.json';
+import config from '../../utils/config.js';
 import Menu from './Component/Menu/Menu';
 
 export default function Navbar({ user }) {

@@ -5,7 +5,7 @@ import {
     Avatar
 } from '@chakra-ui/react';
 import MenuItem from './MenuItem';
-import config from '../../../../utils/config.json';
+import config from '../../../../utils/config.js';
 
 export default function Menu({user}) {
     return (

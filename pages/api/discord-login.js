@@ -1,5 +1,5 @@
 
-import config from '../../utils/config.json';
+import config from '../../utils/config.js';
 
 const OAUTH_DISCORD = new URLSearchParams({
     client_id: config['oauth-discord'].client_id,

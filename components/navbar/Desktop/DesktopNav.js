@@ -7,7 +7,7 @@ import {
     PopoverTrigger,
     PopoverContent
 } from '@chakra-ui/react';
-import config from '../../../utils/config.json';
+import config from '../../../utils/config.js';
 import DesktopSubNav from './DesktopSubNav';
 
 export default function DesktopNav({router}) {

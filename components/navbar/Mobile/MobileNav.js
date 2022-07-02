@@ -8,7 +8,7 @@ import {
 } from 'react-icons/si';
 
 import MobileNavItem from './MobileNavItem';
-import config from '../../../utils/config.json';
+import config from '../../../utils/config.js';
 
 export default function MobileNav({router, user}) {
     return (

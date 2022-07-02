@@ -5,7 +5,7 @@ import {
     SimpleGrid,
     Text
 } from "@chakra-ui/react";
-import config from '../../utils/config.json';
+import config from '../../utils/config.js';
 import FooterItem from "./FooterItem";
 import FooterText from "./FooterText";
 

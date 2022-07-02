@@ -2,7 +2,7 @@ import parseUser from '../utils/parseUser';
 import Head from '../components/head';
 import Footer from '../components/footer/Footer';
 import Navbar from '../components/navbar';
-import config from '../utils/config.json';
+import config from '../utils/config.js';
 import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link, Avatar } from '@chakra-ui/react';
 import fetch from 'node-fetch';
 
@@ -69,7 +69,7 @@ export default function Home({ user, allBot }) {
                 >
                   <Flex alignItems={'center'} gap={3}>
                     <Box>
-                      <Avatar src={`${config.discord.api.cdn}/avatars/${x._id}/${x.avatar}`} name={x.name} size={'lg'} />
+                      <Avatar src={`${x.avatar}`} name={x.name} size={'lg'} />
                     </Box>
                     <Box>
                       <Text fontSize={'xl'} title={x.name} fontWeight={'bold'} color={'teal.600'} noOfLines={1}>
@@ -149,6 +149,7 @@ function filterPrefix(str) {
 
 export async function getServerSideProps(ctx) {
   const user = parseUser(ctx);
+  console.log(config["oauth-discord"].redirect_uri)
 
   let allBot = await fetch(`${config['web-data'].api.base}/bot/all`, {
     method: 'GET'

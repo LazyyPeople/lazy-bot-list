@@ -4,7 +4,7 @@
 import fetch from "node-fetch";
 import { serialize } from 'cookie';
 import { sign } from 'jsonwebtoken';
-import config from '../../../utils/config.json';
+import config from '../../../utils/config.js';
 
 export default async function DiscordCallback(req, res) {
     const {

@@ -1,5 +1,5 @@
 import HeadNext from 'next/head';
-import config from '../../utils/config.json';
+import config from '../../utils/config.js';
 
 export default function Head({title}) {
     const filterTitle = title

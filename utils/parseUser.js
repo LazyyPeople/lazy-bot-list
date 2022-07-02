@@ -1,6 +1,6 @@
 import { parse } from 'cookie';
 import { verify } from 'jsonwebtoken';
-import config from './config.json';
+import config from './config.js';
 
 export default function parseUser(ctx) {
     if(!ctx.req.headers.cookie) return null;

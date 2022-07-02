@@ -1,5 +1,5 @@
 import { serialize } from "cookie";
-import config from '../../../utils/config.json';
+import config from '../../../utils/config.js';
 
 export default function Logout(req, res) {
     res.setHeader("Set-Cookie", [

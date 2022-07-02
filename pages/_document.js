@@ -4,7 +4,7 @@ import {
     Main,
     NextScript
 } from 'next/document';
-import config from '../utils/config.json';
+import config from '../utils/config.js';
 
 export default function Document() {
     return (
