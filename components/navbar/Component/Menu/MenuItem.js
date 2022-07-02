@@ -6,7 +6,7 @@ export default function MenuItem({ data }) {
             boxShadow={'md'}
         >
             {data.map(x => {
-                if (x.name === 'divider') return <MenuDivider />;
+                if (x.name === 'divider') return <MenuDivider key={x.name} />;
 
                 return (
                     <Link href={x.href} key={x.name}>

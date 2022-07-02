@@ -3,11 +3,25 @@ import Head from '../components/head';
 import Footer from '../components/footer/Footer';
 import Navbar from '../components/navbar';
 import config from '../utils/config.js';
-import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link, Avatar } from '@chakra-ui/react';
-import fetch from 'node-fetch';
+import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link, Avatar, Skeleton, SkeletonCircle } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-export default function Home({ user, allBot }) {
-  // console.log(allBot.data[0]);
+export default function Home({ user }) {
+
+  const [loading, setLoad] = useState(false);
+  const [allBot, setAllBot] = useState(null);
+  useEffect(() => {
+    setLoad(true);
+    let url = `${config['web-data'].api.base}/bot/all`;
+    fetch(url, {
+      method: 'GET'
+    }).then(x => x.json())
+    .then(data => {
+      setAllBot(data);
+    })
+
+  }, [allBot]);
+
   return (
     <Box userSelect={'none'}>
       <Head title={'{name} - Home'} />
@@ -59,10 +73,28 @@ export default function Home({ user, allBot }) {
           <Text fontSize={'xl'} color={'gray.500'} fontWeight={'600'} mt={'-3'}>Bot with the most votes on this web</Text>
           <Box mt={10}>
             <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
-              {allBot.statusCode == 200 && allBot.data.map((x, i) => (
+              
+              {!allBot && [1,2,3,5,654,87,987,254].map(x => (
+                <Box key={x} borderRadius={'base'} bg={'blackAlpha.100'} p={5}>
+                  <Flex alignItems={'center'} gap={3}>
+                    <Box>
+                      <SkeletonCircle height={'70px'} width={'70px'} />
+                    </Box>
+                    <Box>
+                      <Skeleton width={'150px'} height={'20px'} />
+                    </Box>
+                  </Flex>
+                  <Flex mt={'10'} gap={'2'}>
+                    <Skeleton width={'50%'} height={'40px'} />
+                    <Skeleton width={'50%'} height={'40px'} />
+                  </Flex>
+                </Box>
+              ))}
+              
+              {allBot && allBot.statusCode == 200 && allBot.data.map((x, i) => (
                 <Stack
                   key={i}
-                  bg={'blackAlpha.200'}
+                  bg={'blackAlpha.100'}
                   boxShadow={'sm'}
                   p={5}
                   borderRadius={'base'}
@@ -149,41 +181,10 @@ function filterPrefix(str) {
 
 export async function getServerSideProps(ctx) {
   const user = parseUser(ctx);
-  console.log(config["oauth-discord"].redirect_uri)
-
-  let allBot = await fetch(`${config['web-data'].api.base}/bot/all`, {
-    method: 'GET'
-  }).then(x => x.json());
-
-  // // for backend
-  // if (allBot.statusCode == 200) {
-  //   let newbot = [];
-  //   for(const data in allBot.data) {
-  //     let i = Object.keys(allBot.data).indexOf(data);
-  //     // console.log(i)
-
-  //     fetch(`${config.discord.api.base}/users/${allBot.data[i]._id}`, {
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: `Bot ${config.discord.api.authorization}`
-  //       }
-  //     }).then(x => x.json())
-  //       .then(x => {
-  //         // allBot.data[i].avatar = x.avatar;
-  //         // console.log(x)
-  //         newbot.push({
-  //           ...allBot.data[i],
-  //           avatar: x.avatar
-  //         })
-  //       })
-  //   }
-  //   console.log(newbot)
-  // }
 
   return {
     props: {
-      user,
-      allBot
+      user
     }
   }
 }

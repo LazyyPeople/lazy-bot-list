@@ -24,6 +24,7 @@ export default {
       },
       {
         name: "Add Bot",
+        href: '/add'
       },
       {
         name: "divider",
@@ -35,7 +36,7 @@ export default {
       },
     ],
     footer_nav: {
-      anotherText: "01 - Jully - 2022",
+      anotherText: "",
       notAffiliated: "DiscordBotList is not affiliated with Discord Inc.",
       links: [
         {
