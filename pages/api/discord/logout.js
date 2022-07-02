@@ -11,5 +11,5 @@ export default function Logout(req, res) {
     res.writeHead(302, {
         Location: "/"
     });
-    res.end();
+    res.redirect('/');
 }

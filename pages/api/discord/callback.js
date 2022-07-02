@@ -7,6 +7,7 @@ import { sign } from 'jsonwebtoken';
 import config from '../../../utils/config.json';
 
 export default async function DiscordCallback(req, res) {
+    console.log(req.headers)
     const {
         code,
         error
@@ -17,7 +18,7 @@ export default async function DiscordCallback(req, res) {
         return res.send(req.query.error);
     }
     // console.log(code)
-    if(!code || typeof code !== 'string') return res.redirect(URI);
+    if(!code || typeof code !== 'string') return res.redirect('/');
     // console.log('g')
 
     const body = new URLSearchParams({

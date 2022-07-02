@@ -2,7 +2,7 @@
     "web-data": {
         "name": "Discord Bot List",
         "api": {
-            "base": "https://lazy-api-production.up.railway.app"
+            "base": "https://lazy-api-production-abc1.up.railway.app"
         }
     },
     "navbar": {
