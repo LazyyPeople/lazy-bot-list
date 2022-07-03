@@ -27,6 +27,10 @@ export default function MobileNavItem({ label, children, href, router }) {
           }}>
           <Text
             fontWeight={600}
+            transition={'all .2s ease'}
+            _hover={{
+              color: 'gray.50'
+            }}
             color={router.pathname === href ? 'gray.200' : 'gray.600'}>
             {label}
           </Text>
