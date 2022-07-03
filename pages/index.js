@@ -76,7 +76,7 @@ export default function Home({ user }) {
       <Box mt={'10'} pb={20}>
         <Container maxW={'6xl'}>
           <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.700'}>Random Bot</Text>
-          <Text fontSize={'xl'} color={'gray.500'} fontWeight={'600'} mt={'-3'}>Bot with the most votes on this web</Text>
+          <Text fontSize={'xl'} color={'gray.500'} fontWeight={'normal'} mt={'-3'}>Bot with the most votes on this web</Text>
           <Box mt={10}>
             <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
               

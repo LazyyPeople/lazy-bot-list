@@ -113,6 +113,6 @@ export default {
   },
   jsonwebtoken: {
     "secret-key": "botlistdiscordbotbylazypeople",
-    "cookie-name": "token",
+    "cookie-name": "auth",
   },
 };
