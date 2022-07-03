@@ -12,8 +12,8 @@ import DesktopSubNav from './DesktopSubNav';
 
 export default function DesktopNav({router}) {
     const linkColor = useColorModeValue('gray.500');
-    const linkActiveColor = useColorModeValue('gray.200');
-    const linkHoverColor = useColorModeValue('white');
+    const linkActiveColor = useColorModeValue('gray.100');
+    const linkHoverColor = useColorModeValue('gray.300');
     const popoverContentBgColor = useColorModeValue('white', 'gray.800');
   
     return (
@@ -25,8 +25,13 @@ export default function DesktopNav({router}) {
                 <Link
                   href={navItem.href}
                   p={2}
+                  // py={1}
+                  // px={4}
+                  rounded={'base'}
+                  // bg={router.pathname === navItem.href ? '#7289da' : 'transparent'}
                   fontSize={'sm'}
-                  fontWeight={700}
+                  fontWeight={'medium'}
+                  transition={'all .3s ease'}
                   color={router.pathname === navItem.href ? linkActiveColor : linkColor}
                   _hover={{
                     textDecoration: 'none',

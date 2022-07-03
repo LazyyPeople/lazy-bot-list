@@ -26,7 +26,7 @@ export default function MobileNavItem({ label, children, href, router }) {
             textDecoration: 'none',
           }}>
           <Text
-            fontWeight={600}
+            fontWeight={'medium'}
             transition={'all .3s ease'}
             _hover={{
               color: 'gray.300'

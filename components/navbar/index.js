@@ -67,7 +67,7 @@ export default function Navbar({ user }) {
                         fontWeight={'800'}
                         fontSize={'xl'}
                         color={useColorModeValue('blue.300', 'white')}>
-                        Lazy
+                        Lazy People
                     </Heading>
 
                     <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
