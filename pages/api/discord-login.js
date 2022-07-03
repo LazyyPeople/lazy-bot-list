@@ -10,6 +10,6 @@ const OAUTH_DISCORD = new URLSearchParams({
 
 const URI = `https://discord.com/api/oauth2/authorize?${OAUTH_DISCORD}`;
 
-export default async(req, res) => {
+export default function DiscordLogin(req, res) {
     res.redirect(URI);
 }

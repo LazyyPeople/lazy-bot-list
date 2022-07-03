@@ -58,7 +58,7 @@ export default function AddBot({ user }) {
                                 1. You must own a bot or be part of a bot owners
                             </ListItem>
                             <ListItem>
-                                2. Make sure your bot doesn't respond to other bots
+                                2. Make sure your bot doesn&apost respond to other bots
                             </ListItem>
                             <ListItem>
                                 3. The bot must have a <b>help</b> command
