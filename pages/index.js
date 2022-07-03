@@ -20,11 +20,8 @@ export default function Home({ user }) {
         setAllBot(data);
       })
   }
-   getData();
-
- /* return () => {
-    getData()
-  }*/
+  
+  getData();
 
   }, []);
 
@@ -43,8 +40,8 @@ export default function Home({ user }) {
             <Flex>
               <Box>
                 <Box>
-                  <Text color={'gray.50'} fontWeight={'700'} fontSize={'4xl'}>Discord Bots</Text>
-                  <Text color={'gray.50'} fontSize={'xl'}>Explore some great <b>Discord Bots</b> for your server</Text>
+                  <Text color={'gray.200'} fontWeight={'700'} fontSize={'2xl'}>Discord Bots</Text>
+                  <Text color={'gray.400'} fontSize={'md'}>Explore some great <b>Discord Bots</b> for your server</Text>
                 </Box>
                 <Box mt={'5'}>
                   <Input
@@ -75,8 +72,8 @@ export default function Home({ user }) {
 
       <Box mt={'10'} pb={20}>
         <Container maxW={'6xl'}>
-          <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.700'}>Random Bot</Text>
-          <Text fontSize={'xl'} color={'gray.500'} fontWeight={'normal'} mt={'-3'}>Bot with the most votes on this web</Text>
+          <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.600'}>Random Bot</Text>
+          {/* <Text fontSize={'md'} color={'gray.500'} fontWeight={'medium'}>Randomly sorted bots</Text> */}
           <Box mt={10}>
             <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
               
