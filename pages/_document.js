@@ -16,9 +16,9 @@ export default function Document() {
                 <meta name='author' content='LazyPeople' />
 
                 <meta property='og:type' content='website' />
-                <meta property='og:site_name' content='Lazy People' />
+                <meta property='og:site_name' content='bot-list.lazypeople.tk' />
                 <meta property='og:url' content='https://bot-list.lazypeople.tk/' />
-                <meta property='og:title' content='New Discord Bot List | By Lazy People' />
+                <meta property='og:title' content='Discord Bots | By Lazy People' />
                 <meta property='og:description' content='Improve your Discord experience using our listed Discord Bot' />
                 <meta property='og:locale' content='en_GB' />
 

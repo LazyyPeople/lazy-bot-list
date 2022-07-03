@@ -94,7 +94,7 @@ export default function Home({ user }) {
                 </Box>
               ))}
               
-              {allBot && allBot.statusCode == 200 && allBot.data.map((x, i) => (
+              {allBot && allBot.statusCode == 200 && allBot.data.sort(() => .5 - Math.random()).map((x, i) => (
                 <Stack
                   key={i}
                   bg={'blackAlpha.100'}
