@@ -83,23 +83,23 @@ export default function Navbar({ user }) {
                     {user ? (
                         <Menu user={user} />
                     ) : (
-                    <Button
-                        display={{ base: 'none', md: 'inline-flex' }}
-                        fontSize={'sm'}
-                        fontWeight={600}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            router.push('/api/discord-login');
-                        }}
-                        color={'white'}
-                        bg={'#5865F2'}
-                        flex={{ base: 1 }}
-                        gap={'2'}
-                        _hover={{
-                            bg: config['login-data'].href.bg,
-                        }}>
-                        <SiDiscord /> Login With Discord
-                    </Button>
+                        <Button
+                            display={{ base: 'none', md: 'inline-flex' }}
+                            fontSize={'sm'}
+                            fontWeight={600}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                router.push('/api/discord-login');
+                            }}
+                            color={'white'}
+                            bg={'#5865F2'}
+                            flex={{ base: 1 }}
+                            gap={'2'}
+                            _hover={{
+                                bg: config['login-data'].href.bg,
+                            }}>
+                            <SiDiscord /> Login With Discord
+                        </Button>
                     )}
                 </Stack>
             </Flex>
@@ -109,4 +109,14 @@ export default function Navbar({ user }) {
             </Collapse>
         </Box>
     );
+}
+
+export async function getServerSideProps(ctx) {
+    const user = parseUser(ctx);
+
+    return {
+        props: {
+            user
+        }
+    }
 }

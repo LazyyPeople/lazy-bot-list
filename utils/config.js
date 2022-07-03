@@ -44,7 +44,7 @@ export default {
           child: [
             {
               name: "Privacy Policy",
-              href: "/",
+              href: "/privacy-policy",
             },
             {
               name: "FAQ",

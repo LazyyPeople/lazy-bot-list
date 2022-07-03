@@ -28,7 +28,7 @@ export default function Home({ user }) {
   return (
     <Box userSelect={'none'}>
       <Head title={'{name} - Home'} />
-      <Navbar user={user} />
+      <Navbar />
 
       <Box
         bg={'gray.700'}
