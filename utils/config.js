@@ -4,7 +4,7 @@ export default {
   "web-data": {
     name: "Discord Bot List",
     api: {
-      base: "https://lazy-api-production-abc1.up.railway.app",
+      base: "https://api.lazypeople.tk",
     },
   },
   navbar: {
@@ -100,7 +100,7 @@ export default {
   "oauth-discord": {
     client_secret: "byXbKnnKXuT68pR3bnZDFjRSdf6lMSDk",
     client_id: "702874025189179533",
-    redirect_uri: `${isProduction ? "https://bot-list.vercel.app/api/discord/callback" : "http://localhost:3000/api/discord/callback"}`,
+    redirect_uri: `${isProduction ? "https://bot-list.lazypeople.tk/api/discord/callback" : "http://localhost:3000/api/discord/callback"}`,
     scopes: ["identify"],
   },
   discord: {

@@ -9,12 +9,11 @@ import config from '../../../../utils/config.js';
 
 export default function Menu({user}) {
     return (
-        <MenuChakra >
+        <MenuChakra>
             <MenuButton
                 as={Button}
                 rounded={'full'}
                 variant={'link'}
-                cursor={'pointer'}
                 minW={0}>
                 <Avatar
                     width={'45px'}

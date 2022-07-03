@@ -1,13 +1,10 @@
-// const redirect_uri = 'http://localhost:3000/api/discord/callback';
-// const URI ='';
-// const scope = ['identify'].join(' ');
 import fetch from "node-fetch";
 import { serialize } from 'cookie';
 import { sign } from 'jsonwebtoken';
 import config from '../../../utils/config.js';
 
 export default async function DiscordCallback(req, res) {
-    console.log(req.url);
+    // console.log(req)
     const {
         code,
         error
@@ -17,9 +14,8 @@ export default async function DiscordCallback(req, res) {
         console.log('error')
         return res.send(req.query.error);
     }
-    // console.log(code)
+
     if(!code || typeof code !== 'string') return res.redirect(URI);
-    // console.log('g')
 
     const body = new URLSearchParams({
         client_id: config["oauth-discord"].client_id,

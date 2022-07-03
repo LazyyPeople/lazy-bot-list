@@ -7,23 +7,26 @@ import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link, Ava
 import { useEffect, useState } from 'react';
 
 export default function Home({ user }) {
-
-  const [loading, setLoad] = useState(false);
   const [allBot, setAllBot] = useState(null);
   useEffect(() => {
     function getData() {
-      setLoad(true);
-      let url = `${config['web-data'].api.base}/bot/all`;
-      fetch(url, {
+      let _d = Date.now();
+      console.log('[API] - Getting bots data');
+      fetch(`${config['web-data'].api.base}/bot/all`, {
         method: 'GET'
       }).then(x => x.json())
       .then(data => {
+        console.log('[API] - Success get all bot data in '+(Date.now() - _d)+'ms')
         setAllBot(data);
       })
   }
-  getData();
+  // getData();
 
-  }, [allBot]);
+  return () => {
+    getData()
+  }
+
+  }, []);
 
   return (
     <Box userSelect={'none'}>
@@ -72,7 +75,7 @@ export default function Home({ user }) {
 
       <Box mt={'10'} pb={20}>
         <Container maxW={'6xl'}>
-          <Text fontWeight={'800'} fontSize={'4xl'} color={'gray.800'}>Random Bot</Text>
+          <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.700'}>Random Bot</Text>
           <Text fontSize={'xl'} color={'gray.500'} fontWeight={'600'} mt={'-3'}>Bot with the most votes on this web</Text>
           <Box mt={10}>
             <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>

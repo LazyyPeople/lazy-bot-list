@@ -4,6 +4,6 @@ import {
 
 export default function FooterText({ text }) {
     return (
-        <Text color={'gray.600'}>{text}</Text>
+        <Text color={'gray.600'} fontSize={{base: 'sm'}}>{text}</Text>
     )
 }

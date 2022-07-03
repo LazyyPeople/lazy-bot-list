@@ -48,13 +48,13 @@ export default function Navbar({ user }) {
                     <IconButton
                         onClick={onToggle}
                         _hover={{
-                            bg: 'blue.200'
+                            bg: 'gray.600'
                         }}
                         _active={{
-                            bg: 'blue.200'
+                            bg: 'gray.600'
                         }}
                         icon={
-                            isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
+                            isOpen ? <CloseIcon color={'gray.400'} w={3} h={3} /> : <HamburgerIcon color={'gray.400'} w={5} h={5} />
                         }
                         variant={'ghost'}
                         aria-label={'Toggle Navigation'}
