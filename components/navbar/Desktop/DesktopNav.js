@@ -25,10 +25,7 @@ export default function DesktopNav({router}) {
                 <Link
                   href={navItem.href}
                   p={2}
-                  // py={1}
-                  // px={4}
                   rounded={'base'}
-                  // bg={router.pathname === navItem.href ? '#7289da' : 'transparent'}
                   fontSize={'sm'}
                   fontWeight={'medium'}
                   transition={'all .3s ease'}

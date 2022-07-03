@@ -4,7 +4,6 @@ import { sign } from 'jsonwebtoken';
 import config from '../../../utils/config.js';
 
 export default async function DiscordCallback(req, res) {
-    // console.log(req)
     const {
         code,
         error

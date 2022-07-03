@@ -14,8 +14,7 @@ import { useRouter } from 'next/router';
 import { SiDiscord } from "react-icons/si";
 import {
     HamburgerIcon,
-    CloseIcon,
-    AddIcon
+    CloseIcon
 } from '@chakra-ui/icons';
 
 import DesktopNav from './Desktop/DesktopNav';
