@@ -20,11 +20,11 @@ export default function Home({ user }) {
         setAllBot(data);
       })
   }
-  // getData();
+   getData();
 
-  return () => {
+ /* return () => {
     getData()
-  }
+  }*/
 
   }, []);
 
