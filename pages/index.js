@@ -55,10 +55,10 @@ export default function Home({ user }) {
                   />
                 </Box>
                 <Box mt={'5'} color={'white'} display={'flex'} gap={'2'} flexWrap={'wrap'}>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
                 </Box>
               </Box>
               <Box>

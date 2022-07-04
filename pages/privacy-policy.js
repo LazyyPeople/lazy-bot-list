@@ -21,7 +21,7 @@ export default function PrivacyPolicy({user}) {
                         <Text fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>We only collect data according to user needs, such as adding bots to our site.</Text>
                         <Text mt={4} fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>The following explains how we use and store your data:</Text>
                         <Box mt={2}>
-                            <Text display={'flex'} gap={1}>1. <Text color={'gray.600'} fontWeight={'bold'} fontSize={'md'}>Discord Authentication</Text></Text>
+                            <Text color={'gray.600'} display={'flex'} gap={1}>1. <Text color={'gray.600'} fontWeight={'bold'} fontSize={'md'}>Discord Authentication</Text></Text>
                             <Text fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>We collect your personal information which has been provided by <b>Discord</b> when you log in to a website using Discord Authentication.</Text>
                             <Text fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>The following personal information has been provided by Discord: </Text>
                             <List spacing={2} mt={2} px={5} color={'gray.600'} rounded={'md'} fontSize={'sm'}>
@@ -44,11 +44,11 @@ export default function PrivacyPolicy({user}) {
                             </Box>
                         </Box>
                         <Box mt={5}>
-                            <Text display={'flex'} gap={1}>2. <Text color={'gray.600'} fontWeight={'bold'} fontSize={'md'}>Cookies</Text></Text>
+                            <Text color={'gray.600'} display={'flex'} gap={1}>2. <Text color={'gray.600'} fontWeight={'bold'} fontSize={'md'}>Cookies</Text></Text>
                             <Text fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>We use cookies to store your personal data which was described in the previous explanation about Discord (1.<b> Discord Authentication</b>). Within the next 24 hours after authentication, the data we store in cookies will be deleted. </Text>
                         </Box>
                         <Box mt={5}>
-                        <Text display={'flex'} gap={1}>3. <Text color={'gray.600'} fontWeight={'bold'} fontSize={'md'}>Displayed data</Text></Text>
+                        <Text display={'flex'} color={'gray.600'} gap={1}>3. <Text color={'gray.600'} fontWeight={'bold'} fontSize={'md'}>Displayed data</Text></Text>
                             <Text fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>On the Home page we just share some information about your bot.</Text>
                             <Text fontSize={{ base: 'sm', md: 'medium' }} color={'gray.600'}>the following data is displayed:</Text>
                             <List spacing={1} mt={2} px={5} color={'gray.600'} rounded={'md'} fontSize={'sm'}>
