@@ -28,7 +28,7 @@ export default function Home({ user }) {
   return (
     <Box userSelect={'none'}>
       <Head title={'{name} - Home'} />
-      <Navbar />
+      <Navbar user={user} />
 
       <Box
         bg={'gray.700'}
@@ -123,7 +123,7 @@ export default function Home({ user }) {
                           borderRadius={'base'}
                           title={'Votes: '+ 122}
                         >
-                          Votes: 122
+                          Votes: 0
                         </Box>
                         <Box
                           as='button'

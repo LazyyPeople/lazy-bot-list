@@ -110,13 +110,3 @@ export default function Navbar({ user }) {
         </Box>
     );
 }
-
-export async function getServerSideProps(ctx) {
-    const user = parseUser(ctx);
-
-    return {
-        props: {
-            user
-        }
-    }
-}

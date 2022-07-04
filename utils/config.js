@@ -52,7 +52,7 @@ export default {
             },
             {
               name: "Rest API",
-              href: "/",
+              href: "https://api.lazypeople.tk",
             },
           ],
         },
