@@ -37,7 +37,7 @@ export default {
     ],
     footer_nav: {
       anotherText: "",
-      notAffiliated: "DiscordBotList is not affiliated with Discord Inc.",
+      notAffiliated: "LazyPeople is not affiliated with Discord Inc.",
       links: [
         {
           name: "Links",
@@ -113,6 +113,9 @@ export default {
   },
   jsonwebtoken: {
     "secret-key": "botlistdiscordbotbylazypeople",
-    "cookie-name": "auth",
+    "cookie-name": {
+      "auth_token": "auth",
+      "redirect_url": "_ru"
+    }
   },
 };

@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { serialize } from 'cookie';
 import { sign } from 'jsonwebtoken';
 import config from '../../../utils/config.js';
+import { parseURL } from "../../../utils/redirectURL.js";
 
 export default async function DiscordCallback(req, res) {
     const {
@@ -56,12 +57,12 @@ export default async function DiscordCallback(req, res) {
     });
     res.setHeader(
         "Set-Cookie",
-        serialize(config.jsonwebtoken["cookie-name"], token, {
+        serialize(config.jsonwebtoken["cookie-name"].auth_token, token, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
             sameSite: 'lax',
             path: '/'
         })
     );
-    res.redirect('/');
+    res.redirect(parseURL(req) ? parseURL(req) : '/');
 }

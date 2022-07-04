@@ -1,4 +1,3 @@
-
 import config from '../../utils/config.js';
 
 const OAUTH_DISCORD = new URLSearchParams({

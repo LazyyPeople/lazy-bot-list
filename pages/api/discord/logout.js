@@ -3,7 +3,7 @@ import config from '../../../utils/config.js';
 
 export default function Logout(req, res) {
     res.setHeader("Set-Cookie", [
-        serialize(config.jsonwebtoken["cookie-name"], "", {
+        serialize(config.jsonwebtoken["cookie-name"].auth_token, "", {
             maxAge: -1,
             path: '/'
         })

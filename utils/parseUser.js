@@ -4,7 +4,7 @@ import config from './config.js';
 
 export default function parseUser(ctx) {
     if(!ctx.req.headers.cookie) return null;
-    const token = parse(ctx.req.headers.cookie)[config.jsonwebtoken['cookie-name']];
+    const token = parse(ctx.req.headers.cookie)[config.jsonwebtoken['cookie-name'].auth_token];
     if(!token) return null;
      
     try {

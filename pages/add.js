@@ -13,6 +13,7 @@ import {
 import Head from "../components/head";
 import Navbar from "../components/navbar";
 import parseUser from "../utils/parseUser";
+import { setRedirectURL } from '../utils/redirectURL';
 import Footer from '../components/footer/Footer';
 
 export default function AddBot({ user }) {
@@ -79,6 +80,7 @@ export default function AddBot({ user }) {
 export async function getServerSideProps(ctx) {
     const user = parseUser(ctx);
     if (!user) {
+        setRedirectURL('/add', ctx.res);
         return {
             redirect: {
                 destination: '/api/discord-login',
