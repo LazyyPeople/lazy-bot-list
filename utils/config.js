@@ -2,7 +2,7 @@ import { isProduction } from "../utils";
 
 export default {
   "web-data": {
-    name: "Discord Bot List",
+    name: "Lazy People",
     api: {
       base: "https://api.lazypeople.tk",
     },
