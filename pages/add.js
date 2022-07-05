@@ -178,7 +178,9 @@ export default function AddBot({ user }) {
                                 {/* <Input onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' /> */}
                                 <InputGroup>
                                     <Input variant={'filled'} onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' />
-                                    <InputRightElement children={idError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (idError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)} />
+                                    <InputRightElement>
+                                        {idError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (idError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)}
+                                    </InputRightElement>
                                 </InputGroup>
                                 {idError && idError.message && <FormHelperText color={'red.400'} mt={0.5}>{idError.message}.</FormHelperText>}
                             </FormControl>
@@ -187,7 +189,9 @@ export default function AddBot({ user }) {
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="prefix">Prefix</FormLabel>
                                 <InputGroup>
                                     <Input onBlur={() => validatePrefix()} variant={'filled'} autoComplete={'off'} id='prefix' fontSize={'sm'} disabled={valueRadio == 's' ? true : false} placeholder={valueRadio == 's' ? "/" : "!"} />
-                                    <InputRightElement children={prefixError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (prefixError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)} />
+                                    <InputRightElement>
+                                        {prefixError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (prefixError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)}
+                                    </InputRightElement>
                                 </InputGroup>
                                 {prefixError && prefixError.message && <FormHelperText color={'red.400'} mt={0.5}>{prefixError.message}.</FormHelperText>}
                                 <Accordion allowToggle mt={2}>
