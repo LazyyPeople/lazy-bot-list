@@ -6,6 +6,10 @@ export default function Logout(req, res) {
         serialize(config.jsonwebtoken["cookie-name"].auth_token, "", {
             maxAge: -1,
             path: '/'
+        }),
+        serialize(config.jsonwebtoken["cookie-name"].redirect_url, "", {
+            maxAge: -1,
+            path: '/'
         })
     ]);
     res.writeHead(302, {
