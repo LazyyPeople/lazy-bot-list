@@ -3,6 +3,7 @@ import {
     FormControl,
     Input,
     FormLabel,
+    FormHelperText,
     Container,
     Flex,
     Text,
@@ -26,8 +27,16 @@ import {
     ModalCloseButton,
     ModalHeader,
     ModalBody,
-    ModalFooter
+    ModalFooter,
+
+    InputGroup,
+    InputRightElement,
+    Spinner
 } from "@chakra-ui/react";
+import {
+    CheckIcon,
+    WarningIcon
+} from '@chakra-ui/icons';
 import Head from "../components/head";
 import Navbar from "../components/navbar";
 import parseUser from "../utils/parseUser";
@@ -61,11 +70,18 @@ export default function AddBot({ user }) {
 
     const [error, setError] = useState(null);
 
-    async function _handleSubmit() {
-        let botID = document.getElementById('idbot');
-
-        // validate bot
-        let app = await fetch('https://discord.com/api/v9/applications/' + botID.value + '/rpc', {
+    const [idError, setIDError] = useState(false);
+    async function validateBot() {
+        setIDError('loading');
+        let id = document.getElementById('idbot');
+        if (!id.value) {
+            setIDError({
+                errorType: 'emptyID',
+                message: 'ID Bot is required'
+            });
+            return;
+        }
+        let app = await fetch('https://discord.com/api/v9/applications/' + id.value + '/rpc', {
             headers: {
                 'Authorization': `Bearer ${config.discord.api.authorization}`
             }
@@ -74,11 +90,11 @@ export default function AddBot({ user }) {
         let responCode = {
             "10002": {
                 errorType: 'Unknown App',
-                message: 'Bot could not found'
+                message: 'Bot can not be found'
             },
             "50035": {
                 errorType: 'Invalid ID',
-                message: 'invalid id provided'
+                message: 'The ID provided is invalid'
             },
             "0": {
                 errorType: 'Unauthorized',
@@ -88,32 +104,59 @@ export default function AddBot({ user }) {
             // Custom code
             "-10001001": {
                 errorType: "Forbidden (not public)",
-                message: 'Your bot is not public'
+                message: 'Your bot is private, we can\'t invite it'
             },
             "-10001002": {
                 errorType: 'Forbidden (bot require code grant)',
-                message: 'Bot can\'t add if require code grant'
+                message: 'Code grant is active, make sure it\'s disabled'
             }
         }
-        if(app.code !== undefined) {
-            setError(responCode[app.code]);
-            window.scrollTo(0,0);
+
+        if (app.code !== undefined) {
+            setIDError(responCode[app.code]);
+            window.scrollTo(0, 0);
             return;
         }
         if (!app.bot_public) {
-            setError(responCode["-10001001"]);
-            window.scrollTo(0,0);
+            setIDError(responCode["-10001001"]);
+            window.scrollTo(0, 0);
             return;
         }
-        if(app.bot_require_code_grant) {
-            setError(responCode["-10001002"]);
-            window.scrollTo(0,0);
+        if (app.bot_require_code_grant) {
+            setIDError(responCode["-10001002"]);
+            window.scrollTo(0, 0);
             return;
         }
+        setIDError('success');
+    }
 
+    const [prefixError, setPrefixError] = useState(null);
+    function validatePrefix(radioValue) {
+        setPrefixError('loading');
+        let prefix = document.getElementById('prefix');
+        if(radioValue == 's') {
+            prefix.value = '/ (slash commands)';
+        } else {
+            prefix.value = '';
+        }
+        if(radioValue !== 's' && !prefix.value) {
+            setPrefixError({
+                message: 'Prefix must be filled in'
+            });
+            return;
+        } else {
+            setPrefixError('success')
+        }
+        if(radioValue !== 's' && prefix.value.length > 5) {
+            setPrefixError({ 
+                message: 'The maximum character in the prefix is ​​only 5 characters'
+            });
+            return;
+        }
+        setPrefixError('success');
+    }
 
-
-        // Prefix
+    async function _handleSubmit() {
 
     }
 
@@ -130,13 +173,23 @@ export default function AddBot({ user }) {
                             <AlertDescription>{error.message}</AlertDescription>
                         </Alert>}
                         <Flex mt={'7'} flexDirection={'column'} gap={'4'}>
-                            <FormControl isRequired>
+                            <FormControl isInvalid={idError && idError.message ? true : false} isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor='idbot'>Bot ID</FormLabel>
-                                <Input id='idbot' fontSize={'sm'} placeholder='698417630108713090' />
+                                {/* <Input onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' /> */}
+                                <InputGroup>
+                                    <Input variant={'filled'} onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' />
+                                    <InputRightElement children={idError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (idError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)} />
+                                </InputGroup>
+                                {idError && idError.message && <FormHelperText color={'red.400'} mt={0.5}>{idError.message}.</FormHelperText>}
                             </FormControl>
-                            <FormControl isRequired>
+
+                            <FormControl isInvalid={prefixError && prefixError.message ? true : false} isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="prefix">Prefix</FormLabel>
-                                <Input id='prefix' fontSize={'sm'} placeholder="!" />
+                                <InputGroup>
+                                    <Input onBlur={() => validatePrefix()} variant={'filled'} autoComplete={'off'} id='prefix' fontSize={'sm'} disabled={valueRadio == 's' ? true : false} placeholder={valueRadio == 's' ? "/" : "!"} />
+                                    <InputRightElement children={prefixError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (prefixError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)} />
+                                </InputGroup>
+                                {prefixError && prefixError.message && <FormHelperText color={'red.400'} mt={0.5}>{prefixError.message}.</FormHelperText>}
                                 <Accordion allowToggle mt={2}>
                                     <AccordionItem borderWidth={0}>
                                         <Text>
@@ -148,12 +201,19 @@ export default function AddBot({ user }) {
                                             </AccordionButton>
                                         </Text>
                                         <AccordionPanel>
-                                            <RadioGroup onChange={setValueRadio} value={valueRadio}>
+                                            <RadioGroup onChange={(e) => {
+                                                setValueRadio(e)
+                                                validatePrefix(e)
+                                            }} value={valueRadio}>
                                                 <Stack color={'gray.500'}>
                                                     <Radio size={'md'} value='s'>Slash Command</Radio>
                                                     <Radio size={'md'} value='sp'>Slash Command and Prefix</Radio>
                                                     <Box pt={4}>
-                                                        <Text color={'telegram.500'} onClick={() => setValueRadio(0)} cursor={'pointer'}>Clear Options</Text>
+                                                        <Text color={'telegram.500'} onClick={() => {
+                                                            document.getElementById('prefix').value = '';
+                                                            validatePrefix()
+                                                            setValueRadio(0)
+                                                        }} cursor={'pointer'}>Clear Options</Text>
                                                     </Box>
                                                 </Stack>
                                             </RadioGroup>
@@ -161,33 +221,39 @@ export default function AddBot({ user }) {
                                     </AccordionItem>
                                 </Accordion>
                             </FormControl>
+
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
-                                <Input id='owners' fontSize={'sm'} placeholder="Use coma (,) for more than one (max 3 id)" />
+                                <Input variant={'filled'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="Use coma (,) for more than one (max 3 id)" />
                             </FormControl>
+
                             <FormControl isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sd">Short Description</FormLabel>
-                                <Input id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
+                                <Input variant={'filled'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
                             </FormControl>
+
                             <FormControl isRequired>
                                 <FormLabel htmlFor={'desc'} fontWeight={'medium'} color={'gray.600'}>Long Description</FormLabel>
-                                <Textarea rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
+                                <Textarea variant={'filled'} autoComplete={'off'} rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
                                 <Button ref={preViewRef} onClick={() => {
                                     onOpen();
                                     PreviewMD()
                                 }} size={'sm'} mt={3} px={5} colorScheme={'teal'}>Preview</Button>
                             </FormControl>
+
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="website">Website</FormLabel>
-                                <Input id='website' fontSize={'sm'} placeholder="Website for your bot" />
+                                <Input variant={'filled'} autoComplete={'off'} id='website' fontSize={'sm'} placeholder="Website for your bot" />
                             </FormControl>
+
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sp">Support Server</FormLabel>
-                                <Input id='sp' fontSize={'sm'} placeholder="Server for your bot" />
+                                <Input variant={'filled'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" />
                             </FormControl>
+
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="IUR">Invite URL</FormLabel>
-                                <Input id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" />
+                                <Input variant={'filled'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" />
                             </FormControl>
 
                             <FormControl>
@@ -210,7 +276,7 @@ export default function AddBot({ user }) {
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Preview Description</ModalHeader>
+                    <ModalHeader color={'gray.500'}>Preview Description</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Prose>
