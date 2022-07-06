@@ -48,7 +48,7 @@ import {
 } from '../utils/markdown';
 import config from "../utils/config";
 // import Select from 'react-select';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
 
@@ -95,6 +95,17 @@ export default function AddBot({ user }) {
                 'Authorization': `Bearer ${config.discord.api.authorization}`
             }
         }).then(x => x.json());
+
+        let getBotFromDatabase = await fetch(`https://api.lazypeople.tk/bot/${id.value}`, {
+            method: 'GET'
+        });
+
+        if(getBotFromDatabase.status == 200) {
+            return setIDError({
+                errorType: 'Bot already added',
+                message: 'This bot is already in the data'
+            })
+        }
 
         let responCode = {
             "10002": {
@@ -166,7 +177,9 @@ export default function AddBot({ user }) {
     }
 
     const [ownersError, setOwnersError] = useState(null);
-    function validateOwners() {        
+    const [ownerIDError, setOwnerIDError] = useState([]);
+    function validateOwners() {
+
         let owners = document.getElementById('owners');
         if(!owners.value) return;
 
@@ -176,7 +189,11 @@ export default function AddBot({ user }) {
         // remove space in array ['id', ''] => ['id']
         .filter(x => x !== '')
         // remove space in array value ['id', ' id2'] => ['id', 'id2']
-        .map(z => z.replace(/ /g, ''));
+        .map(z => z.replace(/ /g, ''))
+        // remove duplicate in array ['test', 't3st', 'test'] => ['test', 't3st']
+        ownersToArray = ownersToArray.filter(function(item, p) {
+            return ownersToArray.indexOf(item) == p;
+        });
         
         if(ownersToArray.includes(user.id)) {
             setOwnersError({
@@ -193,14 +210,23 @@ export default function AddBot({ user }) {
         }
 
         ownersToArray.map(async (userId) => {
-            let userinfo = await fetch('https://discord.com/api/v9/users/'+userId, {
+            let userinfo = await fetch('https://api.lazypeople.tk/user/'+userId+'/fetch', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${config.discord.api.authorization}`
                 }
-            });
-            console.log(userinfo);
+            }).then(x => x.json());
+            // console.log(userinfo);
+            if(userinfo.statusCode == '404') {
+                console.log(`[Fetch] - ${userId} Not found`)
+                return setOwnersError({
+                    message: 'There is an invalid ID, double check the ID again'
+                })
+            } else if(userinfo.statusCode == '200') {
+                return setOwnersError('success');
+            }
         })
+
     }
 
     async function _handleSubmit() {
@@ -275,15 +301,21 @@ export default function AddBot({ user }) {
 
                             <FormControl isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Category</FormLabel>
-                                {/* <Input variant={'filled'} autoComplete={'off'} id='tags' fontSize={'sm'} placeholder="" /> */}
-                                {/* <Select options={tags} /> */}
                                 <MultipleSelect options={tags} />
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
-                                <Input onBlur={() => validateOwners()} variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="use a comma (,) to enter more than one id" />
-                                <FormHelperText fontSize={'sm'}>Who can edit your bot here?</FormHelperText>
+                                
+                                {/* <Input onBlur={() => validateOwners()} variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="use a comma (,) to enter more than one id" /> */}
+                                <InputGroup>
+                                    <Input variant={'outline'} onBlur={() => validateOwners()} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder='use a comma (,) to enter more than one id' />
+                                    <InputRightElement>
+                                        {ownersError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (ownersError == null ? '' : (ownersError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
+                                    </InputRightElement>
+                                </InputGroup>
+                                {ownersError && ownersError.message && <FormHelperText color={'red.400'} mt={0.5}>{ownersError.message}.</FormHelperText>}
+                                {ownersError == 'null' && <FormHelperText fontSize={'sm'}>Who can edit your bot here?</FormHelperText>}
                             </FormControl>
 
                             <FormControl isRequired>
