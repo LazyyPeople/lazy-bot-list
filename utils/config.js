@@ -6,6 +6,16 @@ export default {
     api: {
       base: "https://api.lazypeople.tk",
     },
+    category: [
+      {
+        name: 'Moderation',
+        icon: ''
+      },
+      {
+        name: 'Leveling',
+        icon: ''
+      }
+    ]
   },
   navbar: {
     navbar_data: [

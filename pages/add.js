@@ -47,7 +47,7 @@ import {
     mdToHtml
 } from '../utils/markdown';
 import config from "../utils/config";
-import Select from 'react-select';
+// import Select from 'react-select';
 import { useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
@@ -62,20 +62,12 @@ export default function AddBot({ user }) {
     } = useDisclosure();
     const preViewRef = useRef(null);
 
-    const tags = [
-        {
-            value: 'moderation',
-            label: 'Moderation'
-        },
-        {
-            value: 'leveling',
-            label: 'Leveling'
-        },
-        {
-            value: 'music',
-            label: 'Music'
+    let tags = config["web-data"].category.map(data => {
+        return {
+            label: data.name,
+            value: data.name.toLowerCase()
         }
-    ]
+    });
 
     let [html, setHtml] = useState('<p>hello</p>');
     async function PreviewMD() {
@@ -87,7 +79,7 @@ export default function AddBot({ user }) {
 
     const [error, setError] = useState(false);
 
-    const [idError, setIDError] = useState(false);
+    const [idError, setIDError] = useState(null);
     async function validateBot() {
         setIDError('loading');
         let id = document.getElementById('idbot');
@@ -164,13 +156,51 @@ export default function AddBot({ user }) {
         } else {
             setPrefixError('success')
         }
-        if(radioValue !== 's' && prefix.value.length > 5) {
-            setPrefixError({ 
-                message: 'The maximum character in the prefix is ​​only 5 characters'
+        // if(radioValue !== 's' && prefix.value.length > 5) {
+        //     setPrefixError({ 
+        //         message: 'The maximum character in the prefix is ​​only 5 characters'
+        //     });
+        //     return;
+        // }
+        setPrefixError('success');
+    }
+
+    const [ownersError, setOwnersError] = useState(null);
+    function validateOwners() {        
+        let owners = document.getElementById('owners');
+        if(!owners.value) return;
+
+        setOwnersError('loading');
+        
+        let ownersToArray = owners.value.split(',')
+        // remove space in array ['id', ''] => ['id']
+        .filter(x => x !== '')
+        // remove space in array value ['id', ' id2'] => ['id', 'id2']
+        .map(z => z.replace(/ /g, ''));
+        
+        if(ownersToArray.includes(user.id)) {
+            setOwnersError({
+                message: 'you can\'t enter your id here'
+            })
+            return;
+        }
+
+        if(ownersToArray.length > 3) {
+            setOwnersError({
+                message: 'Maximum can only add three users'
             });
             return;
         }
-        setPrefixError('success');
+
+        ownersToArray.map(async (userId) => {
+            let userinfo = await fetch('https://discord.com/api/v9/users/'+userId, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${config.discord.api.authorization}`
+                }
+            });
+            console.log(userinfo);
+        })
     }
 
     async function _handleSubmit() {
@@ -252,7 +282,8 @@ export default function AddBot({ user }) {
 
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
-                                <Input variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="Use coma (,) for more than one (max 3 id)" />
+                                <Input onBlur={() => validateOwners()} variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="use a comma (,) to enter more than one id" />
+                                <FormHelperText fontSize={'sm'}>Who can edit your bot here?</FormHelperText>
                             </FormControl>
 
                             <FormControl isRequired>
