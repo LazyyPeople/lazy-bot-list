@@ -37,6 +37,7 @@ import {
     CheckIcon,
     WarningIcon
 } from '@chakra-ui/icons';
+import MultipleSelect from "../components/form/MultipleSelect";
 import Head from "../components/head";
 import Navbar from "../components/navbar";
 import parseUser from "../utils/parseUser";
@@ -46,6 +47,7 @@ import {
     mdToHtml
 } from '../utils/markdown';
 import config from "../utils/config";
+import Select from 'react-select';
 import { useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
@@ -60,6 +62,21 @@ export default function AddBot({ user }) {
     } = useDisclosure();
     const preViewRef = useRef(null);
 
+    const tags = [
+        {
+            value: 'moderation',
+            label: 'Moderation'
+        },
+        {
+            value: 'leveling',
+            label: 'Leveling'
+        },
+        {
+            value: 'music',
+            label: 'Music'
+        }
+    ]
+
     let [html, setHtml] = useState('<p>hello</p>');
     async function PreviewMD() {
         let longdesc = document.getElementById('desc');
@@ -68,7 +85,7 @@ export default function AddBot({ user }) {
         return;
     }
 
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
 
     const [idError, setIDError] = useState(false);
     async function validateBot() {
@@ -136,7 +153,7 @@ export default function AddBot({ user }) {
         let prefix = document.getElementById('prefix');
         if(radioValue == 's') {
             prefix.value = '/ (slash commands)';
-        } else {
+        } else if(radioValue == 'sp') {
             prefix.value = '';
         }
         if(radioValue !== 's' && !prefix.value) {
@@ -177,9 +194,9 @@ export default function AddBot({ user }) {
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor='idbot'>Bot ID</FormLabel>
                                 {/* <Input onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' /> */}
                                 <InputGroup>
-                                    <Input variant={'filled'} onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' />
+                                    <Input variant={'outline'} onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' />
                                     <InputRightElement>
-                                        {idError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (idError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)}
+                                        {idError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (idError == null ? '' : (idError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
                                     </InputRightElement>
                                 </InputGroup>
                                 {idError && idError.message && <FormHelperText color={'red.400'} mt={0.5}>{idError.message}.</FormHelperText>}
@@ -188,9 +205,9 @@ export default function AddBot({ user }) {
                             <FormControl isInvalid={prefixError && prefixError.message ? true : false} isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="prefix">Prefix</FormLabel>
                                 <InputGroup>
-                                    <Input onBlur={() => validatePrefix()} variant={'filled'} autoComplete={'off'} id='prefix' fontSize={'sm'} disabled={valueRadio == 's' ? true : false} placeholder={valueRadio == 's' ? "/" : "!"} />
+                                    <Input onBlur={() => validatePrefix()} variant={'outline'} autoComplete={'off'} id='prefix' fontSize={'sm'} disabled={valueRadio == 's' ? true : false} placeholder={valueRadio == 's' ? "/" : "!"} />
                                     <InputRightElement>
-                                        {prefixError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (prefixError.message ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />)}
+                                        {prefixError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (prefixError == null ? '' : (prefixError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
                                     </InputRightElement>
                                 </InputGroup>
                                 {prefixError && prefixError.message && <FormHelperText color={'red.400'} mt={0.5}>{prefixError.message}.</FormHelperText>}
@@ -226,19 +243,26 @@ export default function AddBot({ user }) {
                                 </Accordion>
                             </FormControl>
 
+                            <FormControl isRequired>
+                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Category</FormLabel>
+                                {/* <Input variant={'filled'} autoComplete={'off'} id='tags' fontSize={'sm'} placeholder="" /> */}
+                                {/* <Select options={tags} /> */}
+                                <MultipleSelect options={tags} />
+                            </FormControl>
+
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
-                                <Input variant={'filled'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="Use coma (,) for more than one (max 3 id)" />
+                                <Input variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="Use coma (,) for more than one (max 3 id)" />
                             </FormControl>
 
                             <FormControl isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sd">Short Description</FormLabel>
-                                <Input variant={'filled'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
+                                <Input variant={'outline'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
                             </FormControl>
 
                             <FormControl isRequired>
                                 <FormLabel htmlFor={'desc'} fontWeight={'medium'} color={'gray.600'}>Long Description</FormLabel>
-                                <Textarea variant={'filled'} autoComplete={'off'} rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
+                                <Textarea variant={'outline'} autoComplete={'off'} rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
                                 <Button ref={preViewRef} onClick={() => {
                                     onOpen();
                                     PreviewMD()
@@ -247,17 +271,17 @@ export default function AddBot({ user }) {
 
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="website">Website</FormLabel>
-                                <Input variant={'filled'} autoComplete={'off'} id='website' fontSize={'sm'} placeholder="Website for your bot" />
+                                <Input variant={'outline'} autoComplete={'off'} id='website' fontSize={'sm'} placeholder="Website for your bot" />
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sp">Support Server</FormLabel>
-                                <Input variant={'filled'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" />
+                                <Input variant={'outline'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" />
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="IUR">Invite URL</FormLabel>
-                                <Input variant={'filled'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" />
+                                <Input variant={'outline'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" />
                             </FormControl>
 
                             <FormControl>
