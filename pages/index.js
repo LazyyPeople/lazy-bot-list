@@ -7,21 +7,25 @@ import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link, Ava
 import { useEffect, useState } from 'react';
 
 export default function Home({ user }) {
-  const [allBot, setAllBot] = useState(null);
+  const [allBot, setAllBot] = useState('none');
   useEffect(() => {
     function getData() {
       let _d = Date.now();
       console.log('[API] - Getting bots data');
       fetch(`${config['web-data'].api.base}/bot/all`, {
         method: 'GET'
-      }).then(x => x.json())
-      .then(data => {
-        console.log('[API] - Success get all bot data in '+(Date.now() - _d)+'ms')
-        setAllBot(data);
+      }).then(x => {
+        if (x.status === 200) return x.json();
+        else return setAllBot('none');
       })
-  }
-  
-  getData();
+        .then(data => {
+          if(data === undefined) return setAllBot('none');
+          console.log('[API] - Success get all bot data in ' + (Date.now() - _d) + 'ms')
+          setAllBot(data);
+        })
+    }
+
+    getData();
 
   }, []);
 
@@ -72,101 +76,109 @@ export default function Home({ user }) {
 
       <Box mt={'10'} pb={20}>
         <Container maxW={'6xl'}>
-          <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.600'}>Random Bot</Text>
-          {/* <Text fontSize={'md'} color={'gray.500'} fontWeight={'medium'}>Randomly sorted bots</Text> */}
-          <Box mt={10}>
-            <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
-              
-              {!allBot && [1,2,3,5,654,87,987,254].map(x => (
-                <Box key={x} borderRadius={'base'} bg={'blackAlpha.100'} p={5}>
-                  <Flex alignItems={'center'} gap={3}>
-                    <Box>
-                      <SkeletonCircle height={'70px'} width={'70px'} />
-                    </Box>
-                    <Box>
-                      <Skeleton width={'150px'} height={'20px'} />
-                    </Box>
-                  </Flex>
-                  <Flex mt={'10'} gap={'2'}>
-                    <Skeleton width={'50%'} height={'34px'} />
-                    <Skeleton width={'50%'} height={'34px'} />
-                  </Flex>
-                </Box>
-              ))}
-              
-              {allBot && allBot.statusCode == 200 && allBot.data.sort(() => .5 - Math.random()).map((x, i) => (
-                <Stack
-                  key={i}
-                  bg={'blackAlpha.100'}
-                  boxShadow={'sm'}
-                  p={5}
-                  borderRadius={'base'}
-                >
-                  <Flex alignItems={'center'} gap={3}>
-                    <Box>
-                      <Avatar src={`${x.avatar}`} name={x.name} size={'lg'} />
-                    </Box>
-                    <Box>
-                      <Text fontSize={'xl'} title={x.name} fontWeight={'bold'} color={'teal.600'} noOfLines={1}>
-                        {x.name}
-                      </Text>
-                      <Flex fontSize={'xs'} gap={'1'}>
-                        <Box
-                          as='button'
-                          bg={'messenger.400'}
-                          color={'white'}
-                          py={0.1}
-                          px={2}
-                          fontSize={'10px'}
-                          fontWeight={'500'}
-                          letterSpacing={'0.4px'}
-                          borderRadius={'base'}
-                          title={'Votes: '+ 122}
-                        >
-                          Votes: 0
+          {allBot == 'none' ? (
+            <Box>
+              <Text textAlign={'center'} fontWeight={'bold'}>No data to display.</Text>
+            </Box>
+          ) : (
+            <div>
+              <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.600'}>Random Bot p {allBot}</Text>
+              {/* <Text fontSize={'md'} color={'gray.500'} fontWeight={'medium'}>Randomly sorted bots</Text> */}
+              <Box mt={10}>
+                <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
+
+                  {!allBot && [1, 2, 3, 5, 654, 87, 987, 254].map(x => (
+                    <Box key={x} borderRadius={'base'} bg={'blackAlpha.100'} p={5}>
+                      <Flex alignItems={'center'} gap={3}>
+                        <Box>
+                          <SkeletonCircle height={'70px'} width={'70px'} />
                         </Box>
-                        <Box
-                          as='button'
-                          bg={'messenger.400'}
-                          color={'white'}
-                          py={0.1}
-                          px={2}
-                          fontSize={'10px'}
-                          fontWeight={'500'}
-                          letterSpacing={'0.4px'}
-                          borderRadius={'base'}
-                          title={'Prefix: '+x.prefix}
-                        >
-                          Prefix: <span style={{fontSize:'11px'}}>{`${filterPrefix(x.prefix)}`}</span>
+                        <Box>
+                          <Skeleton width={'150px'} height={'20px'} />
                         </Box>
                       </Flex>
+                      <Flex mt={'10'} gap={'2'}>
+                        <Skeleton width={'50%'} height={'34px'} />
+                        <Skeleton width={'50%'} height={'34px'} />
+                      </Flex>
                     </Box>
-                  </Flex>
-                  <Box>
+                  ))}
 
-                    {/* Short Description */}
-                    <Box maxH={'100px'} mt={'2'} mb={4}>
-                      <Text noOfLines={[3, 4, 3]}></Text>
-                    </Box>
+                  {allBot && allBot.data.sort(() => .5 - Math.random()).map((x, i) => (
+                    <Stack
+                      key={i}
+                      bg={'blackAlpha.100'}
+                      boxShadow={'sm'}
+                      p={5}
+                      borderRadius={'base'}
+                    >
+                      <Flex alignItems={'center'} gap={3}>
+                        <Box>
+                          <Avatar src={`${x.avatar}`} name={x.name} size={'lg'} />
+                        </Box>
+                        <Box>
+                          <Text fontSize={'xl'} title={x.name} fontWeight={'bold'} color={'teal.600'} noOfLines={1}>
+                            {x.name}
+                          </Text>
+                          <Flex fontSize={'xs'} gap={'1'}>
+                            <Box
+                              as='button'
+                              bg={'messenger.400'}
+                              color={'white'}
+                              py={0.1}
+                              px={2}
+                              fontSize={'10px'}
+                              fontWeight={'500'}
+                              letterSpacing={'0.4px'}
+                              borderRadius={'base'}
+                              title={'Votes: ' + 122}
+                            >
+                              Votes: 0
+                            </Box>
+                            <Box
+                              as='button'
+                              bg={'messenger.400'}
+                              color={'white'}
+                              py={0.1}
+                              px={2}
+                              fontSize={'10px'}
+                              fontWeight={'500'}
+                              letterSpacing={'0.4px'}
+                              borderRadius={'base'}
+                              title={'Prefix: ' + x.prefix}
+                            >
+                              Prefix: <span style={{ fontSize: '11px' }}>{`${filterPrefix(x.prefix)}`}</span>
+                            </Box>
+                          </Flex>
+                        </Box>
+                      </Flex>
+                      <Box>
 
-                    {/* Tags */}
-                    {/* <Flex gap={2} fontSize={'xs'}>
+                        {/* Short Description */}
+                        <Box maxH={'100px'} mt={'2'} mb={4}>
+                          <Text noOfLines={[3, 4, 3]}></Text>
+                        </Box>
+
+                        {/* Tags */}
+                        {/* <Flex gap={2} fontSize={'xs'}>
                       {["Moderation", "Economy", "Leveling"].map(x => (
                         <Box as={'button'}>
                           <Text bg={'green.500'} color={'white'} px={2} borderRadius={'base'} fontWeight={'500'}>{x}</Text>
                         </Box>
                       ))}
                     </Flex> */}
-                    {/* Button Invite & View */}
-                    <Flex mt={4} gap={2}>
-                      <Button width={'full'} colorScheme={'telegram'}>View</Button>
-                      <Button width={'full'} colorScheme={'linkedin'}>Invite</Button>
-                    </Flex>
-                  </Box>
-                </Stack>
-              ))}
-            </SimpleGrid>
-          </Box>
+                        {/* Button Invite & View */}
+                        <Flex mt={4} gap={2}>
+                          <Button width={'full'} colorScheme={'telegram'}>View</Button>
+                          <Button width={'full'} colorScheme={'linkedin'}>Invite</Button>
+                        </Flex>
+                      </Box>
+                    </Stack>
+                  ))}
+                </SimpleGrid>
+              </Box>
+            </div>
+          )}
         </Container>
       </Box>
 
@@ -176,8 +188,8 @@ export default function Home({ user }) {
 }
 
 function filterPrefix(str) {
-  if(str.length > 5) {
-    str = str.slice(0,5)+' ...'
+  if (str.length > 5) {
+    str = str.slice(0, 5) + ' ...'
   }
   return str;
 }
