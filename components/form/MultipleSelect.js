@@ -21,6 +21,10 @@ export default function MultipleSelect(props) {
                 control: (base) => ({
                     ...base,
                     paddingLeft: '5px',
+                    ":hover": {
+                        borderColor: props.isInvalid ? 'red' : 'rgba(0, 0, 0, 0.16)'
+                    },
+                    borderColor: props.isInvalid ? 'red' : 'rgba(0, 0, 0, 0.1)',
                     backgroundColor: 'rgba(255, 255, 255, 0.16)'
                 }),
                 placeholder: (base) => ({

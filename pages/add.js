@@ -176,6 +176,18 @@ export default function AddBot({ user }) {
         setPrefixError('success');
     }
 
+    const [category, setCategory] = useState(null);
+    const [catError, setCE] = useState(null);
+    function validateCategory(e) {
+        setCE(null);
+        if(e.length == 0) {
+            return setCE({
+                message: 'Please choose a category according to your bot'
+            });
+        }
+
+    }
+
     const [ownersError, setOwnersError] = useState(null);
     const [ownerIDError, setOwnerIDError] = useState([]);
     function validateOwners() {
@@ -301,10 +313,12 @@ export default function AddBot({ user }) {
 
                             <FormControl isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Category</FormLabel>
-                                <MultipleSelect options={tags} />
+                                <MultipleSelect isInvalid={catError && catError.message ? true : false} onChange={(e) => validateCategory(e)} options={tags} />
+                                {catError && catError.message && <FormHelperText color={'red.400'} mt={0.5}>{catError.message}.</FormHelperText>}
+                                
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isInvalid={ownersError && ownersError.message ? true : false}>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
                                 
                                 {/* <Input onBlur={() => validateOwners()} variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="use a comma (,) to enter more than one id" /> */}
