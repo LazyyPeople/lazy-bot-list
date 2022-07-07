@@ -241,6 +241,16 @@ export default function AddBot({ user }) {
 
     }
 
+    const [sdError, setSDError] = useState(null);
+    function validateSD() {
+        let shortDesc = document.getElementById('sd');
+        if(shortDesc.value.length < 10) {
+            return sdError({
+                message: 'I know this is for a short description, but it\'s too short :\'('
+            })
+        }
+    }
+
     async function _handleSubmit() {
 
     }
@@ -334,7 +344,7 @@ export default function AddBot({ user }) {
 
                             <FormControl isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sd">Short Description</FormLabel>
-                                <Input variant={'outline'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
+                                <Input onBlur={() => validateSD()} variant={'outline'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
                             </FormControl>
 
                             <FormControl isRequired>
