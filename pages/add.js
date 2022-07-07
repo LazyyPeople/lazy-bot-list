@@ -100,7 +100,7 @@ export default function AddBot({ user }) {
             method: 'GET'
         });
 
-        if(getBotFromDatabase.status == 200) {
+        if (getBotFromDatabase.status == 200) {
             return setIDError({
                 errorType: 'Bot already added',
                 message: 'This bot is already in the data'
@@ -154,12 +154,12 @@ export default function AddBot({ user }) {
     function validatePrefix(radioValue) {
         setPrefixError('loading');
         let prefix = document.getElementById('prefix');
-        if(radioValue == 's') {
+        if (radioValue == 's') {
             prefix.value = '/ (slash commands)';
-        } else if(radioValue == 'sp') {
+        } else if (radioValue == 'sp') {
             prefix.value = '';
         }
-        if(radioValue !== 's' && !prefix.value) {
+        if (radioValue !== 's' && !prefix.value) {
             setPrefixError({
                 message: 'Prefix must be filled in'
             });
@@ -180,7 +180,7 @@ export default function AddBot({ user }) {
     const [catError, setCE] = useState(null);
     function validateCategory(e) {
         setCE(null);
-        if(e.length == 0) {
+        if (e.length == 0) {
             return setCE({
                 message: 'Please choose a category according to your bot'
             });
@@ -193,28 +193,28 @@ export default function AddBot({ user }) {
     function validateOwners() {
 
         let owners = document.getElementById('owners');
-        if(!owners.value) return;
+        if (!owners.value) return;
 
         setOwnersError('loading');
-        
+
         let ownersToArray = owners.value.split(',')
-        // remove space in array ['id', ''] => ['id']
-        .filter(x => x !== '')
-        // remove space in array value ['id', ' id2'] => ['id', 'id2']
-        .map(z => z.replace(/ /g, ''))
+            // remove space in array ['id', ''] => ['id']
+            .filter(x => x !== '')
+            // remove space in array value ['id', ' id2'] => ['id', 'id2']
+            .map(z => z.replace(/ /g, ''))
         // remove duplicate in array ['test', 't3st', 'test'] => ['test', 't3st']
-        ownersToArray = ownersToArray.filter(function(item, p) {
+        ownersToArray = ownersToArray.filter(function (item, p) {
             return ownersToArray.indexOf(item) == p;
         });
-        
-        if(ownersToArray.includes(user.id)) {
+
+        if (ownersToArray.includes(user.id)) {
             setOwnersError({
                 message: 'you can\'t enter your id here'
             })
             return;
         }
 
-        if(ownersToArray.length > 3) {
+        if (ownersToArray.length > 3) {
             setOwnersError({
                 message: 'Maximum can only add three users'
             });
@@ -222,20 +222,26 @@ export default function AddBot({ user }) {
         }
 
         ownersToArray.map(async (userId) => {
-            let userinfo = await fetch('https://api.lazypeople.tk/user/'+userId+'/fetch', {
+            let userinfo = await fetch('https://api.lazypeople.tk/user/' + userId + '/fetch', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${config.discord.api.authorization}`
                 }
             }).then(x => x.json());
             // console.log(userinfo);
-            if(userinfo.statusCode == '404') {
+            if (userinfo.statusCode == '404') {
                 console.log(`[Fetch] - ${userId} Not found`)
                 return setOwnersError({
                     message: 'There is an invalid ID, double check the ID again'
                 })
-            } else if(userinfo.statusCode == '200') {
-                return setOwnersError('success');
+            } else if (userinfo.statusCode == '200') {
+                if(userinfo.data.bot) {
+                    return setOwnersError({
+                        message: 'Double check the id given, there is an id which is a bot account'
+                    })
+                } else {
+                    return setOwnersError('success');
+                }
             }
         })
 
@@ -243,11 +249,61 @@ export default function AddBot({ user }) {
 
     const [sdError, setSDError] = useState(null);
     function validateSD() {
+        setSDError('loading');
         let shortDesc = document.getElementById('sd');
-        if(shortDesc.value.length < 10) {
-            return sdError({
+        if(!shortDesc.value) {
+            return setSDError({
+                message: 'This input cannot be empty'
+            })
+        }
+        if (shortDesc.value.length < 10) {
+            return setSDError({
                 message: 'I know this is for a short description, but it\'s too short :\'('
             })
+        }
+
+        setSDError('success');
+    }
+
+    const [descError, setDescError] = useState(null);
+    function validateLongDS() {
+        setDescError('loading')
+        let desc = document.getElementById('desc');
+        if(!desc.value) {
+            return setDescError({
+                message: 'This input cannot be empty'
+            })
+        }
+        // console.log(desc.value)
+        if(desc.value.length < 150) {
+            return setDescError({
+                message: 'Description must have a minimum of 150 characters'
+            })
+        }
+    }
+
+    const [webError, setWebError] = useState(null);
+    function validateWebsite() {
+        
+        let web = document.getElementById('website');
+        // console.log(web.value)
+        if(web.value.length > 0) {
+            setWebError('loading');
+            console.log('p')
+            let validURL = "((http|https)://)(www.)?" 
+            + "[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]"
+            + "{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)"
+            let y = new RegExp(validURL)
+            let validTest = y.test(web.value);
+            console.log(validTest)
+
+            if(!validTest) {
+                return setWebError({
+                    message: 'Invalid website url, check again. make sure to start with HTTPS / HTTP'
+                })
+            } else {
+                return setWebError('success')
+            }
         }
     }
 
@@ -325,12 +381,12 @@ export default function AddBot({ user }) {
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Category</FormLabel>
                                 <MultipleSelect isInvalid={catError && catError.message ? true : false} onChange={(e) => validateCategory(e)} options={tags} />
                                 {catError && catError.message && <FormHelperText color={'red.400'} mt={0.5}>{catError.message}.</FormHelperText>}
-                                
+
                             </FormControl>
 
                             <FormControl isInvalid={ownersError && ownersError.message ? true : false}>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
-                                
+
                                 {/* <Input onBlur={() => validateOwners()} variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="use a comma (,) to enter more than one id" /> */}
                                 <InputGroup>
                                     <Input variant={'outline'} onBlur={() => validateOwners()} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder='use a comma (,) to enter more than one id' />
@@ -342,23 +398,38 @@ export default function AddBot({ user }) {
                                 {ownersError == 'null' && <FormHelperText fontSize={'sm'}>Who can edit your bot here?</FormHelperText>}
                             </FormControl>
 
-                            <FormControl isRequired>
+                            <FormControl isInvalid={sdError && sdError.message ? true : false} isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sd">Short Description</FormLabel>
-                                <Input onBlur={() => validateSD()} variant={'outline'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" />
+                                {/* <Input onBlur={() => validateSD()} variant={'outline'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" /> */}
+                                <InputGroup>
+                                    <Input variant={'outline'} onBlur={() => validateSD()} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder='describe your bot in short' />
+                                    <InputRightElement>
+                                        {sdError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (sdError == null ? '' : (sdError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
+                                    </InputRightElement>
+                                </InputGroup>
+                                {sdError && sdError.message && <FormHelperText color={'red.400'} mt={0.5}>{sdError.message}</FormHelperText>}
                             </FormControl>
 
-                            <FormControl isRequired>
+                            <FormControl isInvalid={descError && descError.message ? true : false} isRequired>
                                 <FormLabel htmlFor={'desc'} fontWeight={'medium'} color={'gray.600'}>Long Description</FormLabel>
-                                <Textarea variant={'outline'} autoComplete={'off'} rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
+                                <Textarea onBlur={() => validateLongDS()} variant={'outline'} autoComplete={'off'} rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
+                                {descError && descError.message && <FormHelperText color={'red.400'} mt={0.5}>{descError.message}.</FormHelperText>}
                                 <Button ref={preViewRef} onClick={() => {
                                     onOpen();
                                     PreviewMD()
                                 }} size={'sm'} mt={3} px={5} colorScheme={'teal'}>Preview</Button>
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isInvalid={webError && webError.message ? true : false}>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="website">Website</FormLabel>
-                                <Input variant={'outline'} autoComplete={'off'} id='website' fontSize={'sm'} placeholder="Website for your bot" />
+                                {/* <Input variant={'outline'} autoComplete={'off'} id='website' fontSize={'sm'} placeholder="Website for your bot" /> */}
+                                <InputGroup>
+                                    <Input variant={'outline'} onBlur={() => validateWebsite()} autoComplete={'off'} id='website' fontSize={'sm'} placeholder='Website for your bot' />
+                                    <InputRightElement>
+                                        {webError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (webError == null ? '' : (webError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
+                                    </InputRightElement>
+                                </InputGroup>
+                                {webError && webError.message && <FormHelperText color={'red.400'} mt={0.5}>{webError.message}.</FormHelperText>}
                             </FormControl>
 
                             <FormControl>
@@ -377,7 +448,7 @@ export default function AddBot({ user }) {
                         </Flex>
                     </Box>
                 </Flex>
-            </Container>
+            </Container >
 
             <Footer />
 

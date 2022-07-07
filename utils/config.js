@@ -14,6 +14,18 @@ export default {
       {
         name: 'Leveling',
         icon: ''
+      },
+      {
+        name: 'Music',
+        icon: '',
+      },
+      {
+        name: 'RPG',
+        icon: ''
+      },
+      {
+        name: 'Economy',
+        icon: ''
       }
     ]
   },
