@@ -30,6 +30,7 @@ import {
     ModalFooter,
 
     InputGroup,
+    InputLeftAddon,
     InputRightElement,
     Spinner
 } from "@chakra-ui/react";
@@ -235,7 +236,7 @@ export default function AddBot({ user }) {
                     message: 'There is an invalid ID, double check the ID again'
                 })
             } else if (userinfo.statusCode == '200') {
-                if(userinfo.data.bot) {
+                if (userinfo.data.bot) {
                     return setOwnersError({
                         message: 'Double check the id given, there is an id which is a bot account'
                     })
@@ -251,7 +252,7 @@ export default function AddBot({ user }) {
     function validateSD() {
         setSDError('loading');
         let shortDesc = document.getElementById('sd');
-        if(!shortDesc.value) {
+        if (!shortDesc.value) {
             return setSDError({
                 message: 'This input cannot be empty'
             })
@@ -269,13 +270,13 @@ export default function AddBot({ user }) {
     function validateLongDS() {
         setDescError('loading')
         let desc = document.getElementById('desc');
-        if(!desc.value) {
+        if (!desc.value) {
             return setDescError({
                 message: 'This input cannot be empty'
             })
         }
         // console.log(desc.value)
-        if(desc.value.length < 150) {
+        if (desc.value.length < 150) {
             return setDescError({
                 message: 'Description must have a minimum of 150 characters'
             })
@@ -284,26 +285,69 @@ export default function AddBot({ user }) {
 
     const [webError, setWebError] = useState(null);
     function validateWebsite() {
-        
+
         let web = document.getElementById('website');
         // console.log(web.value)
-        if(web.value.length > 0) {
+        if (web.value.length > 0) {
             setWebError('loading');
             console.log('p')
-            let validURL = "((http|https)://)(www.)?" 
-            + "[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]"
-            + "{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)"
+            let validURL = "((http|https)://)(www.)?"
+                + "[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]"
+                + "{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)"
             let y = new RegExp(validURL)
             let validTest = y.test(web.value);
-            console.log(validTest)
+            // console.log(validTest)
 
-            if(!validTest) {
+            if (!validTest) {
                 return setWebError({
                     message: 'Invalid website url, check again. make sure to start with HTTPS / HTTP'
                 })
             } else {
                 return setWebError('success')
             }
+        }
+    }
+
+    const [serverError, setServerError] = useState(null);
+    async function validateInviteServer() {
+        setServerError(null);
+        let server = document.getElementById('sp');
+        if(server.value.length > 0) {
+            setServerError('loading');
+            let _n = Date.now();
+            console.log('[API] - Fetch code');
+            let g = await fetch(`https://discord.com/api/v9/invites/${server.value}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${config.discord.api.authorization}`
+                }
+            }).then(x => x.json())
+            if(g.code == 10006) {
+                return setServerError({
+                    message: g.message
+                })
+            }
+            console.log(`[API] - Successfully get guild info [${g.guild.name}] in ${Date.now() - _n}ms`)
+            setServerError('success');
+            return;
+        }
+    }
+
+    const [iurError, setIURError] = useState(null);
+    async function validateInviteBot() {
+        let inv = document.getElementById('IUR');
+        setIURError(null);
+        if(inv.value.length > 0) {
+            setIURError('loading');
+            let regex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(app)?\.com\/(api\/)?oauth2\/authorize\?([^ ]+)\/?/gi;
+            if(!regex.test(inv.value)) {
+                return setIURError({
+                    message: 'Invalid url'
+                })
+            }
+
+            setIURError('success');
+            return;
         }
     }
 
@@ -432,14 +476,29 @@ export default function AddBot({ user }) {
                                 {webError && webError.message && <FormHelperText color={'red.400'} mt={0.5}>{webError.message}.</FormHelperText>}
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isInvalid={serverError && serverError.message ? true : false}>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sp">Support Server</FormLabel>
-                                <Input variant={'outline'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" />
+                                {/* <Input variant={'outline'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" /> */}
+                                <InputGroup>
+                                    <InputLeftAddon children='discord.gg/' />
+                                    <Input onBlur={() => validateInviteServer()} type='text' autoComplete={'off'} id='sp' fontSize={'sm'} placeholder='5zynJbhkuB' />
+                                    <InputRightElement>
+                                        {serverError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (serverError == null ? '' : (serverError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
+                                    </InputRightElement>
+                                </InputGroup>
+                                {serverError && serverError.message && <FormHelperText color={'red.400'} mt={0.5}>{serverError.message}.</FormHelperText>}
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isInvalid={iurError && iurError.message ? true : false}>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="IUR">Invite URL</FormLabel>
-                                <Input variant={'outline'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" />
+                                {/* <Input variant={'outline'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" /> */}
+                                <InputGroup>
+                                    <Input onBlur={() => validateInviteBot()} id="IUR" fontSize={'sm'} autoComplete={'off'} placeholder={'Invite URL'} />
+                                    <InputRightElement>
+                                        {iurError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (iurError == null ? '' : (iurError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
+                                    </InputRightElement>
+                                </InputGroup>
+                                {iurError && iurError.message && <FormHelperText color={'red.400'} mt={0.5}>{iurError.message}.</FormHelperText>}
                             </FormControl>
 
                             <FormControl>
