@@ -480,7 +480,7 @@ export default function AddBot({ user }) {
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sp">Support Server</FormLabel>
                                 {/* <Input variant={'outline'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" /> */}
                                 <InputGroup>
-                                    <InputLeftAddon children='discord.gg/' />
+                                    <InputLeftAddon>discord.gg/</InputLeftAddon>
                                     <Input onBlur={() => validateInviteServer()} type='text' autoComplete={'off'} id='sp' fontSize={'sm'} placeholder='5zynJbhkuB' />
                                     <InputRightElement>
                                         {serverError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (serverError == null ? '' : (serverError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
