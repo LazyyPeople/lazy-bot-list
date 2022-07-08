@@ -55,14 +55,30 @@ export default async function DiscordCallback(req, res) {
     const token = sign(me, config.jsonwebtoken["secret-key"], {
         expiresIn: '24h'
     });
+    
+    const token2 = sign({
+        id: me.id,
+        date: Date.now()
+    }, config.jsonwebtoken["secret-key"], {
+        expiresIn: '24h'
+    });
+
     res.setHeader(
         "Set-Cookie",
-        serialize(config.jsonwebtoken["cookie-name"].auth_token, token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'lax',
-            path: '/'
-        })
+        [
+            serialize(config.jsonwebtoken["cookie-name"].auth_token, token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'lax',
+                path: '/'
+            }),
+            serialize('_authkey', token2, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'lax',
+                path: '/'
+            })
+        ]
     );
     res.redirect(parseURL(req) ? parseURL(req) : '/');
 }
