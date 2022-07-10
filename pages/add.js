@@ -69,7 +69,7 @@ export default function AddBot({ user }) {
             value: data.name.toLowerCase()
         }
     });
-
+    const [buttonloading, setLoad] = useState(false);
     let [html, setHtml] = useState('<p>hello</p>');
     async function PreviewMD() {
         let longdesc = document.getElementById('desc');
@@ -96,6 +96,7 @@ export default function AddBot({ user }) {
                 'Authorization': `Bearer ${config.discord.api.authorization}`
             }
         }).then(x => x.json());
+        // console.log(app)
 
         let getBotFromDatabase = await fetch(`https://api.lazypeople.tk/bot/${id.value}`, {
             method: 'GET'
@@ -177,26 +178,28 @@ export default function AddBot({ user }) {
         setPrefixError('success');
     }
 
-    const [category, setCategory] = useState(null);
+    const [category, setCategory] = useState([]);
     const [catError, setCE] = useState(null);
     function validateCategory(e) {
         setCE(null);
+        setCategory(e);
         if (e.length == 0) {
             return setCE({
-                message: 'Please choose a category according to your bot'
+                message: 'Please choose a Tags according to your bot'
             });
         }
-
+        setCE('success')
     }
 
     const [ownersError, setOwnersError] = useState(null);
-    const [ownerIDError, setOwnerIDError] = useState([]);
+    // const [ownerIDError, setOwnerIDError] = useState([]);
     function validateOwners() {
-
+        setOwnersError(null);
         let owners = document.getElementById('owners');
         if (!owners.value) return;
 
         setOwnersError('loading');
+        setLoad(true);
 
         let ownersToArray = owners.value.split(',')
             // remove space in array ['id', ''] => ['id']
@@ -209,6 +212,7 @@ export default function AddBot({ user }) {
         });
 
         if (ownersToArray.includes(user.id)) {
+            setLoad(false);
             setOwnersError({
                 message: 'you can\'t enter your id here'
             })
@@ -216,6 +220,7 @@ export default function AddBot({ user }) {
         }
 
         if (ownersToArray.length > 3) {
+            setLoad(false);
             setOwnersError({
                 message: 'Maximum can only add three users'
             });
@@ -232,15 +237,18 @@ export default function AddBot({ user }) {
             // console.log(userinfo);
             if (userinfo.statusCode == '404') {
                 console.log(`[Fetch] - ${userId} Not found`)
+                setLoad(false);
                 return setOwnersError({
                     message: 'There is an invalid ID, double check the ID again'
                 })
             } else if (userinfo.statusCode == '200') {
                 if (userinfo.data.bot) {
+                    setLoad(false);
                     return setOwnersError({
                         message: 'Double check the id given, there is an id which is a bot account'
                     })
                 } else {
+                    setLoad(false);
                     return setOwnersError('success');
                 }
             }
@@ -281,16 +289,18 @@ export default function AddBot({ user }) {
                 message: 'Description must have a minimum of 150 characters'
             })
         }
+
+        setDescError('success')
     }
 
     const [webError, setWebError] = useState(null);
     function validateWebsite() {
-
+        setWebError(null)
         let web = document.getElementById('website');
         // console.log(web.value)
         if (web.value.length > 0) {
             setWebError('loading');
-            console.log('p')
+            // console.log('p')
             let validURL = "((http|https)://)(www.)?"
                 + "[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]"
                 + "{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)"
@@ -311,9 +321,11 @@ export default function AddBot({ user }) {
     const [serverError, setServerError] = useState(null);
     async function validateInviteServer() {
         setServerError(null);
+        
         let server = document.getElementById('sp');
-        if(server.value.length > 0) {
+        if (server.value.length > 0) {
             setServerError('loading');
+            setLoad(true);
             let _n = Date.now();
             console.log('[API] - Fetch code');
             let g = await fetch(`https://discord.com/api/v9/invites/${server.value}`, {
@@ -322,13 +334,15 @@ export default function AddBot({ user }) {
                     'Authorization': `Bearer ${config.discord.api.authorization}`
                 }
             }).then(x => x.json())
-            if(g.code == 10006) {
+            if (g.code == 10006) {
+                setLoad(false);
                 return setServerError({
                     message: g.message
                 })
             }
             console.log(`[API] - Successfully get guild info [${g.guild.name}] in ${Date.now() - _n}ms`)
             setServerError('success');
+            setLoad(false);
             return;
         }
     }
@@ -337,10 +351,10 @@ export default function AddBot({ user }) {
     async function validateInviteBot() {
         let inv = document.getElementById('IUR');
         setIURError(null);
-        if(inv.value.length > 0) {
+        if (inv.value.length > 0) {
             setIURError('loading');
             let regex = /(https?:\/\/)?(www\.|canary\.|ptb\.)?discord(app)?\.com\/(api\/)?oauth2\/authorize\?([^ ]+)\/?/gi;
-            if(!regex.test(inv.value)) {
+            if (!regex.test(inv.value)) {
                 return setIURError({
                     message: 'Invalid url'
                 })
@@ -351,8 +365,92 @@ export default function AddBot({ user }) {
         }
     }
 
-    async function _handleSubmit() {
+    // function that can scroll to top
+    function toTop() {
+        window.scroll(0, 0);
+        return;
+    }
 
+    async function _handleSubmit() {
+        setLoad(true);
+        let idbot = document.getElementById('idbot');
+        if (!idbot.value.length) {
+            toTop();
+            setLoad(false);
+            return setIDError({
+                message: 'Please enter bot ID'
+            })
+        }
+
+        let prefix = document.getElementById('prefix');
+        if (!prefix.value.length) {
+            toTop();
+            setLoad(false);
+            return setPrefixError({
+                message: 'Please enter your bot prefix'
+            })
+        }
+
+        // category
+        if (!category.length) {
+            toTop();
+            setLoad(false);
+            return setCE({
+                message: 'Make sure you provide Tags for your bot'
+            })
+        }
+
+        let sd = document.getElementById('sd');
+        if (!sd.value.length) {
+            setLoad(false);
+            return setSDError({
+                message: 'Make sure you provide a short description of your bot'
+            })
+        }
+
+        let desc = document.getElementById('desc');
+        if (!desc.value.length) {
+            setLoad(false);
+            return setDescError({
+                message: 'Make sure you provide a complete description of your bot'
+            })
+        }
+
+        if (!(idError === 'success'
+            &&
+            prefixError === 'success'
+            &&
+            catError === 'success'
+            &&
+            sdError === 'success'
+            &&
+            descError === 'success'
+        )) {
+            setLoad(false);
+            console.log('error');
+            return;
+        }
+
+        let owners = document.getElementById('owners');
+        if(owners.value.length > 0 && ownersError !== 'success') {
+            setLoad(false);
+            return console.log('Error')
+        }
+
+        let website = document.getElementById('website');
+        if(website.value.length > 0 && webError !== 'success') {
+            setLoad(false);
+            return;
+        }
+
+        let server = document.getElementById('sp');
+        if(server.value.length > 0 && serverError !== 'success') {
+            setLoad(false);
+            return;
+        }
+
+        // success code
+        setLoad(false);
     }
 
     return (
@@ -422,7 +520,7 @@ export default function AddBot({ user }) {
                             </FormControl>
 
                             <FormControl isRequired>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Category</FormLabel>
+                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Tags</FormLabel>
                                 <MultipleSelect isInvalid={catError && catError.message ? true : false} onChange={(e) => validateCategory(e)} options={tags} />
                                 {catError && catError.message && <FormHelperText color={'red.400'} mt={0.5}>{catError.message}.</FormHelperText>}
 
@@ -502,7 +600,7 @@ export default function AddBot({ user }) {
                             </FormControl>
 
                             <FormControl>
-                                <Button onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
+                                <Button disabled={buttonloading} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
                             </FormControl>
                         </Flex>
                     </Box>
