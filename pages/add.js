@@ -48,6 +48,8 @@ import {
     mdToHtml
 } from '../utils/markdown';
 import config from "../utils/config";
+import HeadNext from 'next/head';
+import ScriptNext from 'next/script';
 // import Select from 'react-select';
 import { useEffect, useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
@@ -456,6 +458,11 @@ export default function AddBot({ user }) {
     return (
         <>
             <Head title={'{name} - Add Bot'} />
+            
+            <HeadNext>
+                <ScriptNext src="https://js.hcaptcha.com/1/api.js" async defer />
+            </HeadNext>
+            
             <Navbar user={user} />
 
             <Container maxW={'3xl'} mt={'6'} mb={20}>
@@ -600,6 +607,7 @@ export default function AddBot({ user }) {
                             </FormControl>
 
                             <FormControl>
+                                <div className="h-captcha" data-sitekey={config["web-data"].hcaptcha.sitekey}></div>
                                 <Button disabled={buttonloading} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
                             </FormControl>
                         </Flex>

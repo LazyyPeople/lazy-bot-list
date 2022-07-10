@@ -3,6 +3,9 @@ import { isProduction } from "../utils";
 export default {
   "web-data": {
     name: "Lazy People",
+    hcaptcha: {
+      sitekey: isProduction ? "28d600f6-17e7-4f82-9340-c63a22d775c9" : "10000000-ffff-ffff-ffff-000000000001"
+    },
     api: {
       base: "https://api.lazypeople.tk",
     },
