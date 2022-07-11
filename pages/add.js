@@ -51,6 +51,7 @@ import config from "../utils/config";
 import HeadNext from 'next/head';
 import ScriptNext from 'next/script';
 // import Select from 'react-select';
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useEffect, useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
@@ -455,6 +456,11 @@ export default function AddBot({ user }) {
         setLoad(false);
     }
 
+    const captchaRef = useRef(null);
+    function execCaptcha() {
+        captchaRef.current.execute();
+    }
+
     return (
         <>
             <Head title={'{name} - Add Bot'} />
@@ -607,7 +613,13 @@ export default function AddBot({ user }) {
                             </FormControl>
 
                             <FormControl>
-                                <div className="h-captcha" data-sitekey={config["web-data"].hcaptcha.sitekey}></div>
+                                {/* <div className="h-captcha" data-sitekey={config["web-data"].hcaptcha.sitekey}></div> */}
+                                <HCaptcha
+                                    sitekey={config["web-data"].hcaptcha.sitekey}
+                                    onVerify={(token, ekey) => console.log(token, ekey)}
+                                    onLoad={execCaptcha}
+                                    ref={captchaRef}
+                                />
                                 <Button disabled={buttonloading} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
                             </FormControl>
                         </Flex>
