@@ -32,7 +32,9 @@ import {
     InputGroup,
     InputLeftAddon,
     InputRightElement,
-    Spinner
+    Spinner,
+
+    useToast
 } from "@chakra-ui/react";
 import {
     CheckIcon,
@@ -55,10 +57,32 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useEffect, useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
+import getAuthToken from "../utils/getAuthToken";
 
-export default function AddBot({ user }) {
+
+function createToast(toast, body, status, dur) {
+    let _id = 'testing';
+
+    if (!toast.isActive(_id)) {
+        toast({
+            id: _id,
+            title: body.title,
+            description: body.desc,
+            status: status,
+            duration: dur ? dur : 5000,
+            position: 'bottom-right',
+            isClosable: true,
+        })
+    }
+
+    return;
+}
+
+export default function AddBot({ user, authkey }) {
     const [token, setToken] = useState(null);
     const [valueRadio, setValueRadio] = useState(0);
+    const toast = useToast();
+    const [buttonDisabled, setbuttonDisabled] = useState(false);
 
     const {
         isOpen,
@@ -140,19 +164,32 @@ export default function AddBot({ user }) {
 
         if (app.code !== undefined) {
             setIDError(responCode[app.code]);
-            window.scrollTo(0, 0);
+            // createToast(toast, {
+            //     title: 'ID Bot Error',
+            //     desc: responCode[app.code].message
+            // },
+            // 'error');
             return;
         }
         if (!app.bot_public) {
             setIDError(responCode["-10001001"]);
-            window.scrollTo(0, 0);
+            // createToast(toast, {
+            //     title: 'ID Bot Error',
+            //     desc: responCode['-10001001'].message
+            // },
+            // 'error');
             return;
         }
         if (app.bot_require_code_grant) {
             setIDError(responCode["-10001002"]);
-            window.scrollTo(0, 0);
+            // createToast(toast, {
+            //     title: 'ID Bot Error',
+            //     desc: responCode['-10001002'].message
+            // },
+            // 'error');
             return;
         }
+
         setIDError('success');
     }
 
@@ -173,12 +210,7 @@ export default function AddBot({ user }) {
         } else {
             setPrefixError('success')
         }
-        // if(radioValue !== 's' && prefix.value.length > 5) {
-        //     setPrefixError({ 
-        //         message: 'The maximum character in the prefix is ​​only 5 characters'
-        //     });
-        //     return;
-        // }
+        setbuttonDisabled(false);
         setPrefixError('success');
     }
 
@@ -188,17 +220,19 @@ export default function AddBot({ user }) {
         setCE(null);
         setCategory(e);
         if (e.length == 0) {
-            return setCE({
+            setCE({
                 message: 'Please choose a Tags according to your bot'
             });
+            return;
         }
         setCE('success')
     }
 
     const [ownersError, setOwnersError] = useState(null);
-    // const [ownerIDError, setOwnerIDError] = useState([]);
+    const [ownersID, setOwnersID] = useState([]);
     function validateOwners() {
         setOwnersError(null);
+        setOwnersID([])
         let owners = document.getElementById('owners');
         if (!owners.value) return;
 
@@ -219,7 +253,7 @@ export default function AddBot({ user }) {
             setLoad(false);
             setOwnersError({
                 message: 'you can\'t enter your id here'
-            })
+            });
             return;
         }
 
@@ -238,21 +272,27 @@ export default function AddBot({ user }) {
                     'Authorization': `Bearer ${config.discord.api.authorization}`
                 }
             }).then(x => x.json());
-            // console.log(userinfo);
             if (userinfo.statusCode == '404') {
                 console.log(`[Fetch] - ${userId} Not found`)
                 setLoad(false);
-                return setOwnersError({
+                setOwnersError({
                     message: 'There is an invalid ID, double check the ID again'
                 })
+                return;
             } else if (userinfo.statusCode == '200') {
                 if (userinfo.data.bot) {
                     setLoad(false);
+                    createToast(toast, {
+                        title: 'owners',
+                        desc: 'there is an id which is a bot account'
+                    },
+                        'error');
                     return setOwnersError({
                         message: 'Double check the id given, there is an id which is a bot account'
                     })
                 } else {
                     setLoad(false);
+                    setOwnersID(ownersToArray);
                     return setOwnersError('success');
                 }
             }
@@ -274,7 +314,6 @@ export default function AddBot({ user }) {
                 message: 'I know this is for a short description, but it\'s too short :\'('
             })
         }
-
         setSDError('success');
     }
 
@@ -325,7 +364,7 @@ export default function AddBot({ user }) {
     const [serverError, setServerError] = useState(null);
     async function validateInviteServer() {
         setServerError(null);
-        
+
         let server = document.getElementById('sp');
         if (server.value.length > 0) {
             setServerError('loading');
@@ -340,6 +379,11 @@ export default function AddBot({ user }) {
             }).then(x => x.json())
             if (g.code == 10006) {
                 setLoad(false);
+                createToast(toast, {
+                    title: 'support server',
+                    desc: g.message
+                },
+                    'error');
                 return setServerError({
                     message: g.message
                 })
@@ -363,24 +407,20 @@ export default function AddBot({ user }) {
                     message: 'Invalid url'
                 })
             }
-
             setIURError('success');
             return;
         }
-    }
-
-    // function that can scroll to top
-    function toTop() {
-        window.scroll(0, 0);
-        return;
     }
 
     async function _handleSubmit() {
         setLoad(true);
         let idbot = document.getElementById('idbot');
         if (!idbot.value.length) {
-            toTop();
             setLoad(false);
+            createToast(toast, {
+                desc: 'bot id cannot be empty'
+            },
+                'error');
             return setIDError({
                 message: 'Please enter bot ID'
             })
@@ -388,8 +428,11 @@ export default function AddBot({ user }) {
 
         let prefix = document.getElementById('prefix');
         if (!prefix.value.length) {
-            toTop();
             setLoad(false);
+            createToast(toast, {
+                desc: 'Please enter your bot prefix'
+            },
+                'error');
             return setPrefixError({
                 message: 'Please enter your bot prefix'
             })
@@ -397,16 +440,23 @@ export default function AddBot({ user }) {
 
         // category
         if (!category.length) {
-            toTop();
             setLoad(false);
+            createToast(toast, {
+                desc: 'Make sure you choose a tag that matches your bot'
+            },
+                'error');
             return setCE({
-                message: 'Make sure you provide Tags for your bot'
+                message: 'Make sure you choose a tag that matches your bot'
             })
         }
 
         let sd = document.getElementById('sd');
         if (!sd.value.length) {
             setLoad(false);
+            createToast(toast, {
+                desc: 'Make sure you provide a short description of your bot'
+            },
+                'error');
             return setSDError({
                 message: 'Make sure you provide a short description of your bot'
             })
@@ -415,6 +465,10 @@ export default function AddBot({ user }) {
         let desc = document.getElementById('desc');
         if (!desc.value.length) {
             setLoad(false);
+            createToast(toast, {
+                desc: 'Make sure you provide a complete description of your bot'
+            },
+                'error');
             return setDescError({
                 message: 'Make sure you provide a complete description of your bot'
             })
@@ -431,45 +485,85 @@ export default function AddBot({ user }) {
             descError === 'success'
         )) {
             setLoad(false);
-            console.log('error');
+            createToast(toast, {
+                title: 'There is an error',
+                desc: 'Please re-check the form that has been filled'
+            },
+                'error');
             return;
         }
 
         let owners = document.getElementById('owners');
-        if(owners.value.length > 0 && ownersError !== 'success') {
+        if (owners.value.length > 0 && ownersError !== 'success') {
             setLoad(false);
-            return console.log('Error')
+            createToast(toast, {
+                title: 'TextInput: owners',
+                desc: 'The ID provided is invalid'
+            },
+                'error');
+            return;
         }
 
         let website = document.getElementById('website');
-        if(website.value.length > 0 && webError !== 'success') {
+        if (website.value.length > 0 && webError !== 'success') {
             setLoad(false);
+            createToast(toast, {
+                title: 'TextInput: Website',
+                desc: webError.message
+            },
+                'error');
             return;
         }
 
         let server = document.getElementById('sp');
-        if(server.value.length > 0 && serverError !== 'success') {
+        if (server.value.length > 0 && serverError !== 'success') {
             setLoad(false);
+            createToast(toast, {
+                title: 'TextInput: Support Server',
+                desc: serverError.message
+            },
+                'error');
             return;
         }
 
         // success code
+        let body = {
+            bot_id: document.getElementById('idbot').value,
+            prefix: document.getElementById('prefix').value,
+            tags: category,
+            sd: document.getElementById('sd').value,
+            ld: document.getElementById('desc').value
+        }
+
+        if (ownersID.length > 0) {
+            Object.assign(body, { owners: ownersID });
+        }
+        if (website.value.length > 0) {
+            Object.assign(body, { web: website.value });
+        }
+        if (server.value.length > 0) {
+            Object.assign(body, { ss: server.value })
+        }
+
+        console.log(body)
+        // fetch(`https://api.lazypeople.tk/bot`, {
+        //     method: 'POST',
+        //     headers: {
+        //         Authorization: `Bearer ${authkey}`,
+        //     },
+        //     body: JSON.stringify(body)
+        // })
         setLoad(false);
     }
-
-    // const captchaRef = useRef(null);
-    // function execCaptcha() {
-    //     captchaRef.current.execute();
-    // }
 
     return (
         <>
             <Head title={'{name} - Add Bot'} />
-            
+
             <HeadNext>
                 <ScriptNext src="https://js.hcaptcha.com/1/api.js" async defer />
             </HeadNext>
-            
+
             <Navbar user={user} />
 
             <Container maxW={'3xl'} mt={'6'} mb={20}>
@@ -535,7 +629,7 @@ export default function AddBot({ user }) {
 
                             <FormControl isRequired>
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Tags</FormLabel>
-                                <MultipleSelect isInvalid={catError && catError.message ? true : false} onChange={(e) => validateCategory(e)} options={tags} />
+                                <MultipleSelect isInvalid={catError && catError.message ? true : false} onChange={(e) => validateCategory(e.map(x => x.value))} options={tags} />
                                 {catError && catError.message && <FormHelperText color={'red.400'} mt={0.5}>{catError.message}.</FormHelperText>}
 
                             </FormControl>
@@ -620,8 +714,20 @@ export default function AddBot({ user }) {
                                     onVerify={(token, ekey) => {
                                         setToken(token)
                                     }}
+                                    onExpire={() => {
+                                        setToken(null)
+                                    }}
                                 />
-                                <Button disabled={token !== null ? buttonloading : true} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
+                                <Button disabled={buttonDisabled ? true : (token !== null ? buttonloading : true)} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>
+                                    {buttonloading ? (
+                                        <Box display={'flex'} gap={2} justifyContent={'center'} alignItems={'center'}>
+                                            <Spinner size={'sm'} />
+                                            <Text>Loading..</Text>
+                                        </Box>
+                                    ) : (
+                                        <Text>Submit Bot</Text>
+                                    )}
+                                </Button>
                             </FormControl>
                         </Flex>
                     </Box>
@@ -668,9 +774,13 @@ export async function getServerSideProps(ctx) {
         }
     }
 
+    const authkey = getAuthToken(ctx);
+    console.log(authkey)
+
     return {
         props: {
-            user
+            user,
+            authkey
         }
     }
 }
