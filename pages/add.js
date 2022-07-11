@@ -532,7 +532,8 @@ export default function AddBot({ user, authkey }) {
             prefix: document.getElementById('prefix').value,
             tags: category,
             sd: document.getElementById('sd').value,
-            ld: document.getElementById('desc').value
+            ld: document.getElementById('desc').value,
+            captcha: token
         }
 
         if (ownersID.length > 0) {
@@ -546,13 +547,25 @@ export default function AddBot({ user, authkey }) {
         }
 
         console.log(body)
-        // fetch(`https://api.lazypeople.tk/bot`, {
-        //     method: 'POST',
-        //     headers: {
-        //         Authorization: `Bearer ${authkey}`,
-        //     },
-        //     body: JSON.stringify(body)
-        // })
+
+        fetch(`https://api.lazypeople.tk/bot`, {
+            method: 'POST',
+            headers: {
+                authorization: `Bearer ${authkey}`,
+            },
+            body: body
+        }).then(x => x.json())
+            .then(res => {
+                console.log(res);
+                if (res.status !== 200) {
+                    createToast(toast, {
+                        title: 'Unable to submit bot',
+                        desc: res.message
+                    },
+                        'error');
+                    return;
+                }
+            })
         setLoad(false);
     }
 
