@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { serialize } from 'cookie';
 import { sign } from 'jsonwebtoken';
 import config from '../../../utils/config.js';
+import { isProduction, isLocalHost } from "../../../utils/index.js";
 import { parseURL } from "../../../utils/redirectURL.js";
 
 export default async function DiscordCallback(req, res) {
@@ -21,7 +22,12 @@ export default async function DiscordCallback(req, res) {
         client_id: config["oauth-discord"].client_id,
         client_secret: config["oauth-discord"].client_secret,
         grant_type: 'authorization_code',
-        redirect_uri: config["oauth-discord"].redirect_uri,
+        // redirect_uri: config["oauth-discord"].redirect_uri,
+        redirect_uri: isProduction ? config['oauth-discord'].redirect_uri.production :
+        (
+            isLocalHost(req) ? config['oauth-discord'].redirect_uri.dev.localhost :
+                config['oauth-discord'].redirect_uri.dev.ipv4
+        ),
         code,
         scope: config["oauth-discord"].scopes.join(' ')
     }).toString();

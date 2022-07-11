@@ -3,8 +3,9 @@ import { isProduction } from "../utils";
 export default {
   "web-data": {
     name: "Lazy People",
+    port: 3000,
     hcaptcha: {
-      sitekey: isProduction ? "28d600f6-17e7-4f82-9340-c63a22d775c9" : "10000000-ffff-ffff-ffff-000000000001"
+      sitekey: isProduction ? "28d600f6-17e7-4f82-9340-c63a22d775c9" : "28d600f6-17e7-4f82-9340-c63a22d775c9"
     },
     api: {
       base: "https://api.lazypeople.tk",
@@ -125,7 +126,14 @@ export default {
   "oauth-discord": {
     client_secret: "byXbKnnKXuT68pR3bnZDFjRSdf6lMSDk",
     client_id: "702874025189179533",
-    redirect_uri: `${isProduction ? "https://bot-list.lazypeople.tk/api/discord/callback" : "http://localhost:3000/api/discord/callback"}`,
+    redirect_uri: {
+      production: "https://bot-list.lazypeople.tk/api/discord/callback",
+      dev: {
+        "localhost": "http://localhost:3000/api/discord/callback",
+        "ipv4": "http://127.0.0.1:3000/api/discord/callback"
+      }
+    },
+    // redirect_uri: `${isProduction ? "https://bot-list.lazypeople.tk/api/discord/callback" : "http://localhost:3000/api/discord/callback"}`,
     scopes: ["identify"],
   },
   discord: {

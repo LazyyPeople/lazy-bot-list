@@ -15,6 +15,8 @@ export default function MultipleSelect(props) {
         <Select
             {...props}
             components={{ Control }}
+            id='selectbox'
+            instanceId="selectbox"
             isSearchable
             isMulti
             styles={{

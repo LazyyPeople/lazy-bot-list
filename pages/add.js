@@ -57,6 +57,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
 
 export default function AddBot({ user }) {
+    const [token, setToken] = useState(null);
     const [valueRadio, setValueRadio] = useState(0);
 
     const {
@@ -456,10 +457,10 @@ export default function AddBot({ user }) {
         setLoad(false);
     }
 
-    const captchaRef = useRef(null);
-    function execCaptcha() {
-        captchaRef.current.execute();
-    }
+    // const captchaRef = useRef(null);
+    // function execCaptcha() {
+    //     captchaRef.current.execute();
+    // }
 
     return (
         <>
@@ -616,11 +617,11 @@ export default function AddBot({ user }) {
                                 {/* <div className="h-captcha" data-sitekey={config["web-data"].hcaptcha.sitekey}></div> */}
                                 <HCaptcha
                                     sitekey={config["web-data"].hcaptcha.sitekey}
-                                    onVerify={(token, ekey) => console.log(token, ekey)}
-                                    onLoad={execCaptcha}
-                                    ref={captchaRef}
+                                    onVerify={(token, ekey) => {
+                                        setToken(token)
+                                    }}
                                 />
-                                <Button disabled={buttonloading} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
+                                <Button disabled={token !== null ? buttonloading : true} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>Submit Bot</Button>
                             </FormControl>
                         </Flex>
                     </Box>
