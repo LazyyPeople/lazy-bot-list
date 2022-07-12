@@ -74,12 +74,14 @@ export default async function DiscordCallback(req, res) {
         [
             serialize(config.jsonwebtoken["cookie-name"].auth_token, token, {
                 httpOnly: true,
+                expires: new Date(Date.now()+24*60*60*1000),
                 secure: process.env.NODE_ENV !== 'development',
                 sameSite: 'lax',
                 path: '/'
             }),
             serialize('_authkey', token2, {
                 httpOnly: true,
+                expires: new Date(Date.now()+24*60*60*1000),
                 secure: process.env.NODE_ENV !== 'development',
                 sameSite: 'lax',
                 path: '/'
