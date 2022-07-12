@@ -53,7 +53,7 @@ import config from "../utils/config";
 import HeadNext from 'next/head';
 import ScriptNext from 'next/script';
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
 import getAuthToken from "../utils/getAuthToken";
@@ -535,9 +535,10 @@ export default function AddBot({ user, authkey }) {
         fetch(`https://api.lazypeople.tk/bot`, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 authorization: `Bearer ${authkey}`,
             },
-            body: body
+            body: JSON.stringify(body)
         }).then(x => x.json())
             .then(res => {
                 console.log(res);
@@ -552,6 +553,10 @@ export default function AddBot({ user, authkey }) {
             })
         setLoad(false);
     }
+
+    useEffect(() => {
+        console.log(token);
+    }, [token])
 
     return (
         <>
