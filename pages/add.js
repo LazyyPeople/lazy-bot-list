@@ -554,10 +554,6 @@ export default function AddBot({ user, authkey }) {
         setLoad(false);
     }
 
-    useEffect(() => {
-        console.log(token);
-    }, [token])
-
     return (
         <>
             <Head title={'{name} - Add Bot'} />
