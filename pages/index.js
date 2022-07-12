@@ -19,7 +19,7 @@ export default function Home({ user }) {
         else return setAllBot('none');
       })
         .then(data => {
-          if(data === undefined) return setAllBot('none');
+          if (data === undefined) return setAllBot('none');
           console.log('[API] - Success get all bot data in ' + (Date.now() - _d) + 'ms')
           setAllBot(data);
         })
@@ -42,15 +42,16 @@ export default function Home({ user }) {
         <Container maxW={'6xl'}>
           <Box py={{ base: '30px', md: '45px' }}>
             <Flex>
-              <Box>
+              <Box width={'100%'} maxW={'xl'}>
                 <Box>
                   <Text color={'gray.200'} fontWeight={'700'} fontSize={'2xl'}>Discord Bots</Text>
                   <Text color={'gray.400'} fontSize={'md'}>Explore some great <b>Discord Bots</b> for your server</Text>
                 </Box>
-                <Box mt={'5'}>
+                <Box mt={'5'} width={'100%'} display={'block'}>
                   <Input
                     placeholder='Search Bot Dank Memer, Mee6, Koya, etc.'
                     borderColor={'gray.500'}
+                    width={'full'}
                     focusBorderColor={'blue.200'}
                     color={'white'}
                     _hover={{
@@ -59,10 +60,13 @@ export default function Home({ user }) {
                   />
                 </Box>
                 <Box mt={'5'} color={'white'} display={'flex'} gap={'2'} flexWrap={'wrap'}>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>Moderation</Box>
+                  {config['web-data'].category.slice(0, 3).map(x => (
+                    <>
+                      <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>{x.name}</Box>
+                    </>
+                  ))}
                   <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
+                    
                 </Box>
               </Box>
               <Box>
@@ -82,7 +86,7 @@ export default function Home({ user }) {
             </Box>
           ) : (
             <div>
-              <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.600'}>Random Bot p {allBot}</Text>
+              <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.600'}>Random Bot</Text>
               {/* <Text fontSize={'md'} color={'gray.500'} fontWeight={'medium'}>Randomly sorted bots</Text> */}
               <Box mt={10}>
                 <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>

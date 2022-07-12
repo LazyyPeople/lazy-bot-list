@@ -52,9 +52,8 @@ import {
 import config from "../utils/config";
 import HeadNext from 'next/head';
 import ScriptNext from 'next/script';
-// import Select from 'react-select';
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import DOMPurify from "dompurify";
 import getAuthToken from "../utils/getAuthToken";
@@ -164,29 +163,14 @@ export default function AddBot({ user, authkey }) {
 
         if (app.code !== undefined) {
             setIDError(responCode[app.code]);
-            // createToast(toast, {
-            //     title: 'ID Bot Error',
-            //     desc: responCode[app.code].message
-            // },
-            // 'error');
             return;
         }
         if (!app.bot_public) {
             setIDError(responCode["-10001001"]);
-            // createToast(toast, {
-            //     title: 'ID Bot Error',
-            //     desc: responCode['-10001001'].message
-            // },
-            // 'error');
             return;
         }
         if (app.bot_require_code_grant) {
             setIDError(responCode["-10001002"]);
-            // createToast(toast, {
-            //     title: 'ID Bot Error',
-            //     desc: responCode['-10001002'].message
-            // },
-            // 'error');
             return;
         }
 
@@ -788,7 +772,6 @@ export async function getServerSideProps(ctx) {
     }
 
     const authkey = getAuthToken(ctx);
-    console.log(authkey)
 
     return {
         props: {
