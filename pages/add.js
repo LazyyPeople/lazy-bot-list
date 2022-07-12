@@ -381,7 +381,7 @@ export default function AddBot({ user, authkey }) {
 
     const [iurError, setIURError] = useState(null);
     async function validateInviteBot() {
-        let inv = document.getElementById('IUR');
+        let inv = document.getElementById('iur');
         setIURError(null);
         if (inv.value.length > 0) {
             setIURError('loading');
@@ -558,6 +558,10 @@ export default function AddBot({ user, authkey }) {
             })
         setLoad(false);
     }
+
+    useEffect(() => {
+        console.log(token)
+    }, [token])
 
     return (
         <>
