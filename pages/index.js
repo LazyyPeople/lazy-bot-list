@@ -3,7 +3,7 @@ import Head from '../components/head';
 import Footer from '../components/footer/Footer';
 import Navbar from '../components/navbar';
 import config from '../utils/config.js';
-import { Container, Box, Flex, Input, Button, Text, SimpleGrid, Stack, Link, Avatar, Skeleton, SkeletonCircle } from '@chakra-ui/react';
+import { Container, Box, Flex, Heading, Input, Button, Text, SimpleGrid, Stack, Link, Avatar, Skeleton, SkeletonCircle } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 export default function Home({ user }) {
@@ -35,12 +35,14 @@ export default function Home({ user }) {
       <Navbar user={user} />
 
       <Box
-        bg={'gray.700'}
+        bg={'gray.900'}
         boxShadow={'sm'}
         userSelect={'none'}
+        pt={{base: '70px', md:'80px'}}
+        pb={21}
       >
         <Container maxW={'6xl'}>
-          <Box py={{ base: '30px', md: '45px' }}>
+          <Box py={{ base: '30px', md: '5px' }}>
             <Flex>
               <Box width={'100%'} maxW={'xl'}>
                 <Box>
@@ -62,10 +64,10 @@ export default function Home({ user }) {
                 <Box mt={'5'} color={'white'} display={'flex'} gap={'2'} flexWrap={'wrap'}>
                   {config['web-data'].category.slice(0, 3).map(x => (
                     <>
-                      <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>{x.name}</Box>
+                      <Box as={Button} bg={'facebook.400'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>{x.name}</Box>
                     </>
                   ))}
-                  <Box as={Button} bg={'teal.600'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
+                  <Box as={Button} bg={'facebook.400'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
                     
                 </Box>
               </Box>
@@ -78,7 +80,7 @@ export default function Home({ user }) {
       </Box>
 
 
-      <Box mt={'10'} pb={20}>
+      <Box bg={'gray.800'} pt={'10'} pb={20}>
         <Container maxW={'6xl'}>
           {allBot == 'none' ? (
             <Box>
@@ -183,6 +185,25 @@ export default function Home({ user }) {
               </Box>
             </div>
           )}
+
+          <Box
+            p={6}
+            mt={10}
+            borderRadius={'base'}
+            bg={'gray.900'}
+          >
+            <Heading fontSize={{base: 'md'}}>Tags</Heading>
+            <Box
+              display={'flex'}
+              gap={2}
+              mt={4}
+              flexWrap={'wrap'}
+            >
+              {config['web-data'].category.map((x,i) => (
+                <Box key={i}  as={Button} rounded={'base'} px={5} bg={'linkedin.700'} size={'sm'}>{x.name}</Box>
+              ))}
+            </Box>
+          </Box>
         </Container>
       </Box>
 

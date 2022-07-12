@@ -13,8 +13,12 @@ import config from '../../../utils/config.js';
 export default function MobileNav({router, user}) {
     return (
       <Stack
-        bg={useColorModeValue('gray.700')}
+        bg={useColorModeValue('gray.900', 'gray.900')}
         p={4}
+        borderBottomColor={'gray.700'}
+        borderBottomWidth={2}
+        borderBottomLeftRadius={'4px'}
+        borderBottomRightRadius={'4px'}
         display={{ md: 'none' }}>
         {config.navbar.navbar_data.map((navItem) => (
           <MobileNavItem key={navItem.label} router={router} {...navItem} />

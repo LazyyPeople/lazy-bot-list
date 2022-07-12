@@ -28,9 +28,11 @@ export default function Navbar({ user }) {
     const router = useRouter();
 
     return (
-        <Box>
+        <Box position={'fixed'} w={'full'} zIndex={20}>
             <Flex
-                bg={useColorModeValue('gray.700', 'gray.800')}
+                bg={useColorModeValue('gray.700', 'gray.900')}
+                backdropFilter={'auto'}
+                backdropBlur={'3px'}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: 2 }}
@@ -47,10 +49,10 @@ export default function Navbar({ user }) {
                     <IconButton
                         onClick={onToggle}
                         _hover={{
-                            bg: 'gray.600'
+                            bg: 'gray.700'
                         }}
                         _active={{
-                            bg: 'gray.600'
+                            bg: 'gray.700'
                         }}
                         icon={
                             isOpen ? <CloseIcon color={'gray.400'} w={3} h={3} /> : <HamburgerIcon color={'gray.400'} w={5} h={5} />
@@ -65,7 +67,7 @@ export default function Navbar({ user }) {
                         fontFamily={'heading'}
                         fontWeight={'800'}
                         fontSize={'xl'}
-                        color={useColorModeValue('blue.300', 'white')}>
+                        color={useColorModeValue('blue.300', 'green.300')}>
                         Lazy People
                     </Heading>
 

@@ -29,7 +29,7 @@ export default function MobileNavItem({ label, children, href, router }) {
             fontWeight={'medium'}
             transition={'all .3s ease'}
             _hover={{
-              color: 'gray.300'
+              color: 'gray.100'
             }}
             color={router.pathname === href ? 'gray.100' : 'gray.600'}>
             {label}

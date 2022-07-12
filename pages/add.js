@@ -530,6 +530,11 @@ export default function AddBot({ user, authkey }) {
             Object.assign(body, { ss: server.value })
         }
 
+        let iur = document.getElementById("iur");
+        if(iur.value.length > 0) {
+            Object.assign(body, {iur: iur.value});
+        }
+
         console.log(body)
 
         fetch(`https://api.lazypeople.tk/bot`, {
@@ -564,7 +569,7 @@ export default function AddBot({ user, authkey }) {
 
             <Navbar user={user} />
 
-            <Container maxW={'3xl'} mt={'6'} mb={20}>
+            <Container maxW={'3xl'} pt={'70px'} mb={20}>
                 <Flex flexDirection={{ base: 'column', md: 'column' }} gap={10}>
                     <Box>
                         {error && <Alert status='error'>
@@ -697,7 +702,7 @@ export default function AddBot({ user, authkey }) {
                                 <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="IUR">Invite URL</FormLabel>
                                 {/* <Input variant={'outline'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" /> */}
                                 <InputGroup>
-                                    <Input onBlur={() => validateInviteBot()} id="IUR" fontSize={'sm'} autoComplete={'off'} placeholder={'Invite URL'} />
+                                    <Input onBlur={() => validateInviteBot()} id="iur" fontSize={'sm'} autoComplete={'off'} placeholder={'Invite URL'} />
                                     <InputRightElement>
                                         {iurError == 'loading' ? <Spinner size={'sm'} color={'blue.400'} /> : (iurError == null ? '' : (iurError !== 'success' ? <WarningIcon color={'red.300'} /> : <CheckIcon color='green.500' />))}
                                     </InputRightElement>

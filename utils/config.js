@@ -24,7 +24,7 @@ export default {
         icon: '',
       },
       {
-        name: 'RPG',
+        name: 'Anime',
         icon: ''
       },
       {
