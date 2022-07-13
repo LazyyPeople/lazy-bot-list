@@ -7,7 +7,7 @@ import Select, {
     StylesConfig
 } from 'react-select';
 import {
-    Box
+    Box, useColorModeValue
 } from '@chakra-ui/react';
 
 export default function MultipleSelect(props) {
@@ -17,6 +17,7 @@ export default function MultipleSelect(props) {
             components={{ Control }}
             id='selectbox'
             instanceId="selectbox"
+            placeholder={'Select Tags'}
             isSearchable
             isMulti
             styles={{
@@ -24,15 +25,44 @@ export default function MultipleSelect(props) {
                     ...base,
                     paddingLeft: '5px',
                     ":hover": {
-                        borderColor: props.isInvalid ? 'red' : 'rgba(0, 0, 0, 0.16)'
+                        borderColor: props.isInvalid ? 'red' : 'rgba(225,225,225, 0.3)'
                     },
-                    borderColor: props.isInvalid ? 'red' : 'rgba(0, 0, 0, 0.1)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.16)'
+                    borderColor: props.isInvalid ? 'red' : 'rgba(225,225,225, 0.2)',
+                    backgroundColor: 'gray.300'
                 }),
+                menu: (b) => ({
+                    ...b,
+                    background: "#171923"
+                }),
+                option: (b, {isFocused, isSelected}) => ({
+                    ...b,
+                    background: isFocused ? '#1A202C' : null,
+                    ":active": {
+                        background: '#2D3748'
+                    }
+                }),
+
+                multiValue: (b) => ({
+                    ...b,
+                    background: '#2D3748'
+                }),
+                multiValueLabel: (b) => ({
+                    ...b,
+                    color: '#CBD5E0',
+                    fontWeight: '600'
+                }),
+                multiValueRemove: (b) => ({
+                    ...b,
+                    backgroundColor: '#4A5568',
+                    ":hover": {
+                        backgroundColor: '#718096'
+                    }
+                }),
+
                 placeholder: (base) => ({
                     ...base,
                     fontSize: '13px',
-                    color: '#718096'
+                    color: 'rgba(225,225,225,0.3)'
                 })
             }}
         />

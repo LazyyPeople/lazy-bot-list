@@ -16,8 +16,8 @@ export default function Menu({user}) {
                 variant={'link'}
                 minW={0}>
                 <Avatar
-                    width={'45px'}
-                    height={'45px'}
+                    width={'40px'}
+                    height={'40px'}
                     src={
                         `${config.discord.api.cdn}/avatars/${user.id}/${user.avatar}.png`
                     }

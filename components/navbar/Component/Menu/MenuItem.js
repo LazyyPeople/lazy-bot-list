@@ -11,8 +11,9 @@ export default function MenuItem({ data }) {
                 return (
                     <Link href={x.href} key={x.name}>
                         <MenuitemChakra
-                            color={x.style == 'red' ? 'red.400' : 'gray.700'}
+                            color={x.style == 'red' ? 'red.400' : 'gray.300'}
                             display={'flex'}
+                            fontWeight={'medium'}
                             gap={'3'}
                             _hover={{
                                 textDecoration: 'none'

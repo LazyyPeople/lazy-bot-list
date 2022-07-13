@@ -34,7 +34,8 @@ import {
     InputRightElement,
     Spinner,
 
-    useToast
+    useToast,
+    useColorModeValue
 } from "@chakra-ui/react";
 import {
     CheckIcon,
@@ -79,6 +80,7 @@ function createToast(toast, body, status, dur) {
 
 export default function AddBot({ user, authkey }) {
     const [token, setToken] = useState(null);
+    const captchaRef = useRef(''); 
     const [valueRadio, setValueRadio] = useState(0);
     const toast = useToast();
     const [buttonDisabled, setbuttonDisabled] = useState(false);
@@ -546,6 +548,9 @@ export default function AddBot({ user, authkey }) {
             body: JSON.stringify(body)
         }).then(x => x.json())
             .then(res => {
+                // captchaRef.current.resetCaptcha();
+                setToken(null);
+
                 console.log(res);
                 if (res.status !== 200) {
                     createToast(toast, {
@@ -582,7 +587,7 @@ export default function AddBot({ user, authkey }) {
                         </Alert>}
                         <Flex mt={'7'} flexDirection={'column'} gap={'4'}>
                             <FormControl isInvalid={idError && idError.message ? true : false} isRequired>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor='idbot'>Bot ID</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor='idbot'>Bot ID</FormLabel>
                                 {/* <Input onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' /> */}
                                 <InputGroup>
                                     <Input variant={'outline'} onBlur={() => validateBot()} autoComplete={'off'} id='idbot' fontSize={'sm'} placeholder='698417630108713090' />
@@ -594,7 +599,7 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isInvalid={prefixError && prefixError.message ? true : false} isRequired>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="prefix">Prefix</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="prefix">Prefix</FormLabel>
                                 <InputGroup>
                                     <Input onBlur={() => validatePrefix()} variant={'outline'} autoComplete={'off'} id='prefix' fontSize={'sm'} disabled={valueRadio == 's' ? true : false} placeholder={valueRadio == 's' ? "/" : "!"} />
                                     <InputRightElement>
@@ -635,14 +640,14 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isRequired>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Tags</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="owners">Tags</FormLabel>
                                 <MultipleSelect isInvalid={catError && catError.message ? true : false} onChange={(e) => validateCategory(e.map(x => x.value))} options={tags} />
                                 {catError && catError.message && <FormHelperText color={'red.400'} mt={0.5}>{catError.message}.</FormHelperText>}
 
                             </FormControl>
 
                             <FormControl isInvalid={ownersError && ownersError.message ? true : false}>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="owners">Owners</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="owners">Owners</FormLabel>
 
                                 {/* <Input onBlur={() => validateOwners()} variant={'outline'} autoComplete={'off'} id='owners' fontSize={'sm'} placeholder="use a comma (,) to enter more than one id" /> */}
                                 <InputGroup>
@@ -656,7 +661,7 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isInvalid={sdError && sdError.message ? true : false} isRequired>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sd">Short Description</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="sd">Short Description</FormLabel>
                                 {/* <Input onBlur={() => validateSD()} variant={'outline'} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder="describe your bot in short" /> */}
                                 <InputGroup>
                                     <Input variant={'outline'} onBlur={() => validateSD()} autoComplete={'off'} id='sd' fontSize={'sm'} placeholder='describe your bot in short' />
@@ -668,7 +673,7 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isInvalid={descError && descError.message ? true : false} isRequired>
-                                <FormLabel htmlFor={'desc'} fontWeight={'medium'} color={'gray.600'}>Long Description</FormLabel>
+                                <FormLabel htmlFor={'desc'} fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')}>Long Description</FormLabel>
                                 <Textarea onBlur={() => validateLongDS()} variant={'outline'} autoComplete={'off'} rows={15} id='desc' fontSize={'sm'} placeholder='Long description, Markdown only, min 150 characters' />
                                 {descError && descError.message && <FormHelperText color={'red.400'} mt={0.5}>{descError.message}.</FormHelperText>}
                                 <Button ref={preViewRef} onClick={() => {
@@ -678,7 +683,7 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isInvalid={webError && webError.message ? true : false}>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="website">Website</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="website">Website</FormLabel>
                                 {/* <Input variant={'outline'} autoComplete={'off'} id='website' fontSize={'sm'} placeholder="Website for your bot" /> */}
                                 <InputGroup>
                                     <Input variant={'outline'} onBlur={() => validateWebsite()} autoComplete={'off'} id='website' fontSize={'sm'} placeholder='Website for your bot' />
@@ -690,7 +695,7 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isInvalid={serverError && serverError.message ? true : false}>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="sp">Support Server</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="sp">Support Server</FormLabel>
                                 {/* <Input variant={'outline'} autoComplete={'off'} id='sp' fontSize={'sm'} placeholder="Server for your bot" /> */}
                                 <InputGroup>
                                     <InputLeftAddon>discord.gg/</InputLeftAddon>
@@ -703,7 +708,7 @@ export default function AddBot({ user, authkey }) {
                             </FormControl>
 
                             <FormControl isInvalid={iurError && iurError.message ? true : false}>
-                                <FormLabel fontWeight={'medium'} color={'gray.600'} htmlFor="IUR">Invite URL</FormLabel>
+                                <FormLabel fontWeight={'bold'} color={useColorModeValue('gray.600', 'gray.400')} htmlFor="IUR">Invite URL</FormLabel>
                                 {/* <Input variant={'outline'} autoComplete={'off'} id='IUR' fontSize={'sm'} placeholder="Invite URL for your bot" /> */}
                                 <InputGroup>
                                     <Input onBlur={() => validateInviteBot()} id="iur" fontSize={'sm'} autoComplete={'off'} placeholder={'Invite URL'} />
@@ -716,7 +721,8 @@ export default function AddBot({ user, authkey }) {
 
                             <FormControl>
                                 {/* <div className="h-captcha" data-sitekey={config["web-data"].hcaptcha.sitekey}></div> */}
-                                <HCaptcha
+                                {/* <HCaptcha
+                                    ref={captchaRef}
                                     sitekey={config["web-data"].hcaptcha.sitekey}
                                     onVerify={(token, ekey) => {
                                         setToken(token)
@@ -724,7 +730,7 @@ export default function AddBot({ user, authkey }) {
                                     onExpire={() => {
                                         setToken(null)
                                     }}
-                                />
+                                /> */}
                                 <Button disabled={buttonDisabled ? true : (token !== null ? buttonloading : true)} onClick={() => _handleSubmit()} colorScheme={'messenger'} px={8} size={'md'} mt={3}>
                                     {buttonloading ? (
                                         <Box display={'flex'} gap={2} justifyContent={'center'} alignItems={'center'}>
@@ -753,7 +759,7 @@ export default function AddBot({ user, authkey }) {
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader color={'gray.500'}>Preview Description</ModalHeader>
+                    <ModalHeader color={'gray.400'}>Preview Description</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Prose>
@@ -761,7 +767,7 @@ export default function AddBot({ user, authkey }) {
                         </Prose>
                     </ModalBody>
                     <ModalFooter>
-                        <Text fontSize={{ base: 'xs', md: 'sm' }} color={'gray.600'} fontWeight={'medium'}>*This is just a preview, maybe the text size will change when on the page view bot</Text>
+                        <Text fontSize={{ base: 'xs', md: 'sm' }} color={'gray.400'} fontWeight={'medium'}>*This is just a preview, maybe the text size will change when on the page view bot</Text>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
