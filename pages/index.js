@@ -88,7 +88,7 @@ export default function Home({ user }) {
             </Box>
           ) : (
             <div>
-              <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.600'}>Random Bot</Text>
+              <Text fontWeight={'800'} fontSize={'2xl'} color={'gray.300'}>Random Bot</Text>
               {/* <Text fontSize={'md'} color={'gray.500'} fontWeight={'medium'}>Randomly sorted bots</Text> */}
               <Box mt={10}>
                 <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
@@ -110,10 +110,10 @@ export default function Home({ user }) {
                     </Box>
                   ))}
 
-                  {allBot && allBot.data.sort(() => .5 - Math.random()).map((x, i) => (
+                  {allBot && allBot.data.map((x, i) => (
                     <Stack
                       key={i}
-                      bg={'blackAlpha.100'}
+                      bg={'gray.900'}
                       boxShadow={'sm'}
                       p={5}
                       borderRadius={'base'}
@@ -123,8 +123,8 @@ export default function Home({ user }) {
                           <Avatar src={`${x.avatar}`} name={x.name} size={'lg'} />
                         </Box>
                         <Box>
-                          <Text fontSize={'xl'} title={x.name} fontWeight={'bold'} color={'teal.600'} noOfLines={1}>
-                            {x.name}
+                          <Text fontSize={'xl'} title={x.name} fontWeight={'bold'} color={'teal.300'} noOfLines={1}>
+                            {x.username}
                           </Text>
                           <Flex fontSize={'xs'} gap={'1'}>
                             <Box
@@ -167,7 +167,7 @@ export default function Home({ user }) {
 
                         {/* Tags */}
                         {/* <Flex gap={2} fontSize={'xs'}>
-                      {["Moderation", "Economy", "Leveling"].map(x => (
+                      {x.tags.map(x => (
                         <Box as={'button'}>
                           <Text bg={'green.500'} color={'white'} px={2} borderRadius={'base'} fontWeight={'500'}>{x}</Text>
                         </Box>
