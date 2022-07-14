@@ -524,10 +524,6 @@ export default function AddBot({ user, authkey }) {
         <>
             <Head title={'{name} - Add Bot'} />
 
-            <HeadNext>
-                <ScriptNext src="https://js.hcaptcha.com/1/api.js" async defer />
-            </HeadNext>
-
             <Navbar user={user} />
 
             <Container maxW={'3xl'} pt={'70px'} mb={20}>
