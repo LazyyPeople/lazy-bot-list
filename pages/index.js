@@ -7,7 +7,7 @@ import { Container, Box, Flex, Heading, Input, Button, Text, SimpleGrid, Stack, 
 import { useEffect, useState } from 'react';
 
 export default function Home({ user }) {
-  const [allBot, setAllBot] = useState('none');
+  const [allBot, setAllBot] = useState([]);
   useEffect(() => {
     function getData() {
       let _d = Date.now();
@@ -200,7 +200,7 @@ export default function Home({ user }) {
               flexWrap={'wrap'}
             >
               {config['web-data'].category.map((x,i) => (
-                <Box key={i}  as={Button} rounded={'base'} px={5} bg={'linkedin.700'} size={'sm'}>{x.name}</Box>
+                <Box key={i} as={Button} rounded={'base'} px={5} bg={'linkedin.700'} size={'sm'}>{x.name}</Box>
               ))}
             </Box>
           </Box>
