@@ -1,0 +1,10 @@
+[
+    {
+        "id": "idbot",
+        "label": "ID Bot",
+        "isRequired": true,
+        "type": "default",
+        "placeholder": "698417630108713090",
+        "validation": "validateBot"
+    }
+]

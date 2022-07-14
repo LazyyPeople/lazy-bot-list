@@ -14,11 +14,12 @@ import {
     mdToHtml
 } from '../utils/markdown';
 import config from "../utils/config";
-import HeadNext from 'next/head';
-import ScriptNext from 'next/script';
 import { useRef, useState } from "react";
 import DOMPurify from "dompurify";
+
 import getAuthToken from "../utils/getAuthToken";
+const FormBuild = require('../components/form/AddForm/FormBuild.json');
+
 import ModalPreview from '../components/form/AddForm/ModalPreview';
 import InputAdd from '../components/form/AddForm/Input';
 import SubmitButton from "../components/form/AddForm/SubmitButton";
@@ -71,6 +72,7 @@ export default function AddBot({ user, authkey }) {
     }
 
     const [idError, setIDError] = useState(null);
+    
     async function validateBot() {
         setIDError('loading');
         let id = document.getElementById('idbot');
@@ -530,6 +532,7 @@ export default function AddBot({ user, authkey }) {
                 <Flex flexDirection={{ base: 'column', md: 'column' }} gap={10}>
                     <Box>
                         <Flex mt={'7'} flexDirection={'column'} gap={'4'}>
+                            
                             <InputAdd
                                 placeholder={'698417630108713090'}
                                 id={'idbot'}
@@ -624,7 +627,7 @@ export default function AddBot({ user, authkey }) {
                             />
 
                             <InputAdd
-                                id={"IUR"}
+                                id={"iur"}
                                 _errorState={iurError}
                                 validation={validateInviteBot}
                                 placeholder={'Invite URL'}
