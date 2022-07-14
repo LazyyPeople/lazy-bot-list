@@ -213,8 +213,8 @@ export default function Home({ user }) {
 }
 
 function filterPrefix(str) {
-  if (str.length > 5) {
-    str = str.slice(0, 5) + ' ...'
+  if (str.length > 10) {
+    str = str.slice(0, 10) + ' ...'
   }
   return str;
 }
