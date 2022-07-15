@@ -25,6 +25,7 @@ import InputAdd from '../components/form/AddForm/Input';
 import SubmitButton from "../components/form/AddForm/SubmitButton";
 import Tags from "../components/form/AddForm/Tags";
 import Description from "../components/form/AddForm/Description";
+import Router from "next/router";
 
 function createToast(toast, body, status, dur) {
     let _id = 'testing';
@@ -505,12 +506,30 @@ export default function AddBot({ user, authkey }) {
             },
             body: JSON.stringify(body)
         }).then(x => {
+            console.log(x)
             if (x.status == 500) {
                 return createToast(toast, {
                     title: 'Server problem '+ x.status,
                     desc: 'There is a problem on the server side.'
                 },
                     'error');
+            }
+
+            if(x.status == 409) {
+                return createToast(toast, {
+                    title: 'The bot has already been registered'
+                },
+                    'info')
+            }
+
+            if(x.status == 201) {
+                createToast(toast, {
+                    title: 'Bot added successfully',
+                    desc: 'Please wait for your bot to be approved from the Bot Reviewer'
+                },
+                    'success');
+                    Router.push('/');
+                return;
             }
         })
         setLoad(false);

@@ -38,7 +38,7 @@ export default function Home({ user }) {
         bg={'gray.900'}
         boxShadow={'sm'}
         userSelect={'none'}
-        pt={{base: '70px', md:'80px'}}
+        pt={{ base: '70px', md: '80px' }}
         pb={21}
       >
         <Container maxW={'6xl'}>
@@ -68,7 +68,7 @@ export default function Home({ user }) {
                     </>
                   ))}
                   <Box as={Button} bg={'facebook.400'} _hover={{ bg: 'teal.700' }} py={'1'} px={'3'} fontSize={'sm'} size={'sm'} rounded={'base'} fontWeight={'600'}>All Tags</Box>
-                    
+
                 </Box>
               </Box>
               <Box>
@@ -93,7 +93,7 @@ export default function Home({ user }) {
               <Box mt={10}>
                 <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
 
-                  {!allBot && [1, 2, 3, 5, 654, 87, 987, 254].map(x => (
+                  {!allBot.data && [1, 2, 3, 5, 654, 87, 987, 254].map(x => (
                     <Box key={x} borderRadius={'base'} bg={'blackAlpha.100'} p={5}>
                       <Flex alignItems={'center'} gap={3}>
                         <Box>
@@ -120,7 +120,7 @@ export default function Home({ user }) {
                     >
                       <Flex alignItems={'center'} gap={3}>
                         <Box>
-                          <Avatar src={`${x.avatar}`} name={x.name} size={'lg'} />
+                          <Avatar src={`${x.avatar}`} borderRadius={'base'} name={x.name} size={'lg'} />
                         </Box>
                         <Box>
                           <Text fontSize={'xl'} title={x.name} fontWeight={'bold'} color={'teal.300'} noOfLines={1}>
@@ -162,17 +162,17 @@ export default function Home({ user }) {
 
                         {/* Short Description */}
                         <Box maxH={'100px'} mt={'2'} mb={4}>
-                          <Text noOfLines={[3, 4, 3]}></Text>
+                          <Text noOfLines={[3, 4, 3]}>{x.short_description}</Text>
                         </Box>
 
                         {/* Tags */}
-                        {/* <Flex gap={2} fontSize={'xs'}>
-                      {x.tags.map(x => (
-                        <Box as={'button'}>
-                          <Text bg={'green.500'} color={'white'} px={2} borderRadius={'base'} fontWeight={'500'}>{x}</Text>
-                        </Box>
-                      ))}
-                    </Flex> */}
+                        <Flex gap={2} fontSize={'xs'}>
+                          {x.tags.map(x => (
+                            <Box as={'button'}>
+                              <Text bg={'cyan.600'} color={'white'} px={2} borderRadius={'2px'} fontWeight={'500'}>{x.slice(0,1).toUpperCase()}{x.slice(1, x.length)}</Text>
+                            </Box>
+                          ))}
+                        </Flex>
                         {/* Button Invite & View */}
                         <Flex mt={4} gap={2}>
                           <Button width={'full'} colorScheme={'telegram'}>View</Button>
@@ -192,14 +192,14 @@ export default function Home({ user }) {
             borderRadius={'base'}
             bg={'gray.900'}
           >
-            <Heading fontSize={{base: 'md'}}>Tags</Heading>
+            <Heading fontSize={{ base: 'md' }}>Tags</Heading>
             <Box
               display={'flex'}
               gap={2}
               mt={4}
               flexWrap={'wrap'}
             >
-              {config['web-data'].category.map((x,i) => (
+              {config['web-data'].category.map((x, i) => (
                 <Box key={i} as={Button} rounded={'base'} px={5} bg={'linkedin.700'} size={'sm'}>{x.name}</Box>
               ))}
             </Box>
