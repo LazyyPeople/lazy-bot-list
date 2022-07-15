@@ -110,7 +110,7 @@ export default function Home({ user }) {
                     </Box>
                   ))}
 
-                  {allBot && allBot.data.map((x, i) => (
+                  {allBot.data && allBot.data.map((x, i) => (
                     <Stack
                       key={i}
                       bg={'gray.900'}

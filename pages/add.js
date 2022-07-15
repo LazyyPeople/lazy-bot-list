@@ -72,7 +72,7 @@ export default function AddBot({ user, authkey }) {
     }
 
     const [idError, setIDError] = useState(null);
-    
+
     async function validateBot() {
         setIDError('loading');
         let id = document.getElementById('idbot');
@@ -505,20 +505,14 @@ export default function AddBot({ user, authkey }) {
             },
             body: JSON.stringify(body)
         }).then(x => {
-            console.log(x)
+            if (x.status == 500) {
+                return createToast(toast, {
+                    title: 'Server problem '+ x.status,
+                    desc: 'There is a problem on the server side.'
+                },
+                    'error');
+            }
         })
-            .then(res => {
-
-                console.log(res);
-                // if (res.status !== 200) {
-                //     createToast(toast, {
-                //         title: 'Unable to submit bot',
-                //         desc: res.message
-                //     },
-                //         'error');
-                //     return;
-                // }
-            })
         setLoad(false);
     }
 
@@ -532,7 +526,7 @@ export default function AddBot({ user, authkey }) {
                 <Flex flexDirection={{ base: 'column', md: 'column' }} gap={10}>
                     <Box>
                         <Flex mt={'7'} flexDirection={'column'} gap={'4'}>
-                            
+
                             <InputAdd
                                 placeholder={'698417630108713090'}
                                 id={'idbot'}
