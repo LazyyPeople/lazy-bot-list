@@ -93,8 +93,8 @@ export default function Home({ user }) {
               <Box mt={10}>
                 <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 3 }} spacing={5}>
 
-                  {!allBot.data && [1, 2, 3, 5, 654, 87, 987, 254].map(x => (
-                    <Box key={x} borderRadius={'base'} bg={'blackAlpha.100'} p={5}>
+                  {!allBot.data && [1, 2, 3, 5, 654, 87, 987, 254].map((x,i) => (
+                    <Box key={i} borderRadius={'base'} bg={'blackAlpha.100'} p={5}>
                       <Flex alignItems={'center'} gap={3}>
                         <Box>
                           <SkeletonCircle height={'70px'} width={'70px'} />
@@ -167,8 +167,8 @@ export default function Home({ user }) {
 
                         {/* Tags */}
                         <Flex gap={2} fontSize={'xs'}>
-                          {x.tags.map(x => (
-                            <Box as={'button'}>
+                          {x.tags.map((x,i) => (
+                            <Box key={i} as={'button'}>
                               <Text bg={'cyan.600'} color={'white'} px={2} borderRadius={'2px'} fontWeight={'500'}>{x.slice(0,1).toUpperCase()}{x.slice(1, x.length)}</Text>
                             </Box>
                           ))}
